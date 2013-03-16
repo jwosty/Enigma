@@ -12,12 +12,17 @@ let all n be = List.init n (fun _ -> be)
   
 // TODO: Add more registers (X, Y, Z, I, J)
 type Register = 
-  | A | B | C
+  | A | B | C | X | Y | Z | I | J
   member this.Bits =
     match this with
-      | A -> [false;false;false;false;false]
-      | B -> [false;false;false;false;true]
-      | C -> [false;false;false;true ;false]
+      | A -> Convert.ToBits 0 5
+      | B -> Convert.ToBits 1 5
+      | C -> Convert.ToBits 2 5
+      | X -> Convert.ToBits 3 5
+      | Y -> Convert.ToBits 4 5
+      | Z -> Convert.ToBits 5 5
+      | I -> Convert.ToBits 6 5
+      | J -> Convert.ToBits 7 5
 
 type SourceOperand = 
   | Lit of int | Reg of Register
