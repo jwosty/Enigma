@@ -1,5 +1,6 @@
 module Enigma.Emulator.Lib.Instructions
 open System
+open Enigma.Emulator.Lib.Conversions
 
 let all n be = List.init n (fun _ -> be)
   
