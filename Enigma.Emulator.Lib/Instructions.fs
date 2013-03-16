@@ -9,8 +9,7 @@ let getUnionCase (x : 'a) =
         | case, _ -> case.Name
 
 let all n be = List.init n (fun _ -> be)
-  
-// TODO: Add more registers (X, Y, Z, I, J)
+
 type Register = 
   | A | B | C | X | Y | Z | I | J
   member this.Bits =
@@ -24,6 +23,7 @@ type Register =
       | I -> Convert.ToBits 6 5
       | J -> Convert.ToBits 7 5
 
+// Can be either a literal value or a register
 type SourceOperand = 
   | Lit of int | Reg of Register
   member this.Bits =
@@ -31,11 +31,18 @@ type SourceOperand =
       | Reg r -> false :: r.Bits
       | Lit n -> true :: Convert.ToBits (n + 1) 5
   
+  // Get the value
   member this.Eval () =
     match this with
+      // For regisers, read the register contents
       | Reg r -> Registers.get (getUnionCase r)
+      // For literal values, return the value
       | Lit n -> n
 
+// Represents a DCPU-16 instruction, like:
+// SET A, 0
+// which can be created directly with:
+// SET(A, Lit 0)
 type Instruction =
   | SET of Register*SourceOperand
   | ADD of Register*SourceOperand
@@ -43,6 +50,7 @@ type Instruction =
   | MUL of Register*SourceOperand
   | DIV of Register*SourceOperand
   
+  // Get the binary representation
   member this.Bits =
     let genBits (dst : Register) (src : SourceOperand) code = src.Bits @ dst.Bits @ (Convert.ToBits code 5)
     match this with
@@ -52,6 +60,7 @@ type Instruction =
       | MUL(dst, src) -> genBits dst src 0x04
       | DIV(dst, src) -> genBits dst src 0x06
   
+  // Excecute the instruction
   member this.Eval () =
     match this with
       | SET(dst, src) -> Registers.set (getUnionCase dst) (src.Eval ())
