@@ -31,6 +31,9 @@ type Instruction =
       | SET (dst, src) -> src.bits @ dst.bits @ [false;false;false;false;true]
       | HLT            -> all 6 false @ all 5 false @ all 5 true
 
+// For FSI; doesn't get compiled (#if FALSE gets rid of annoying warnings)
+#if FALSE
 SET(B, Lit 0).bits = [true; false; false; false; false; true;    false; false; false; false; true;     false; false; false; false; true]
 SET(A, Lit 1).bits = [true; false; false; false; true; false;    false; false; false; false; false;    false; false; false; false; true]
 SET(A, Reg B).bits = [false; false; false; false; false; true;   false; false; false; false; false;    false; false; false; false; true]
+#endif
