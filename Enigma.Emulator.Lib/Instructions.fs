@@ -2,13 +2,7 @@ module Enigma.Emulator.Lib.Instructions
 open System
 
 let all n be = List.init n (fun _ -> be)
-
-type System.Convert with
-  static member ToBits (i : int) l =
-    let str = Convert.ToString (i, 2)
-    let x = str.PadLeft (l, '0')
-    x |> Seq.map (fun ch -> if ch = '1' then true else false) |> Seq.toList
-
+  
 // TODO: Add more registers (X, Y, Z, I, J)
 type Register = 
   | A | B | C
