@@ -21,12 +21,21 @@ type SourceOperand =
       | Lit n -> true :: Convert.ToBits (n + 1) 5
 
 type Instruction =
-  | SET of Register*SourceOperand | HLT
+  | SET of Register*SourceOperand
+  | ADD of Register*SourceOperand
+  | SUB of Register*SourceOperand
+  | MUL of Register*SourceOperand
+  | DIV of Register*SourceOperand
   
   member this.Bits =
+    let genBits (dst : Register) (src : SourceOperand) code = src.Bits @ dst.Bits @ (Convert.ToBits code 5)
+    
     match this with
-      | SET (dst, src) -> src.Bits @ dst.Bits @ [false;false;false;false;true]
-      | HLT            -> all 6 false @ all 5 false @ all 5 true
+      | SET (dst, src) -> genBits dst src 0x01
+      | ADD (dst, src) -> genBits dst src 0x02
+      | SUB (dst, src) -> genBits dst src 0x03
+      | MUL (dst, src) -> genBits dst src 0x04
+      | DIV (dst, src) -> genBits dst src 0x06
   
   // Get the raw machine code instruction, e.g:
   // SET A, 0   --->   0x8401
