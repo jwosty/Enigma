@@ -1,6 +1,12 @@
 module Enigma.Emulator.Lib.Instructions
 open System
+open Microsoft.FSharp.Reflection
 open Enigma.Emulator.Lib.Conversions
+open Enigma.Emulator.Lib.DCPU16
+
+let getUnionCase (x : 'a) =
+      match FSharpValue.GetUnionFields(x, typeof<'a>) with
+        | case, _ -> case.Name
 
 let all n be = List.init n (fun _ -> be)
   
@@ -19,6 +25,11 @@ type SourceOperand =
     match this with
       | Reg r -> false :: r.Bits
       | Lit n -> true :: Convert.ToBits (n + 1) 5
+  
+  member this.Eval () =
+    match this with
+      | Reg r -> Registers.get (getUnionCase r)
+      | Lit n -> n
 
 type Instruction =
   | SET of Register*SourceOperand
@@ -29,13 +40,16 @@ type Instruction =
   
   member this.Bits =
     let genBits (dst : Register) (src : SourceOperand) code = src.Bits @ dst.Bits @ (Convert.ToBits code 5)
-    
     match this with
-      | SET (dst, src) -> genBits dst src 0x01
-      | ADD (dst, src) -> genBits dst src 0x02
-      | SUB (dst, src) -> genBits dst src 0x03
-      | MUL (dst, src) -> genBits dst src 0x04
-      | DIV (dst, src) -> genBits dst src 0x06
+      | SET(dst, src) -> genBits dst src 0x01
+      | ADD(dst, src) -> genBits dst src 0x02
+      | SUB(dst, src) -> genBits dst src 0x03
+      | MUL(dst, src) -> genBits dst src 0x04
+      | DIV(dst, src) -> genBits dst src 0x06
+  
+  member this.Eval () =
+    match this with
+      | SET(dst, src) -> Registers.set (getUnionCase dst) (src.Eval ())
   
   // Get the raw machine code instruction, e.g:
   // SET A, 0   --->   0x8401
