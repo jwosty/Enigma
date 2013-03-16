@@ -27,6 +27,6 @@ Global
 		{F012E375-5DE6-4A21-A1B6-CEFA1341A161}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Enigma.Assembler\Enigma.Assembler.fsproj
+		StartupItem = Enigma.Emulator\Enigma.Emulator.fsproj
 	EndGlobalSection
 EndGlobal
