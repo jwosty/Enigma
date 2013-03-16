@@ -1,15 +1,18 @@
 module Enigma.Emulator.Lib.Instructions
 open System
 
-let toBits (i : int) l =
-  let str = Convert.ToString (i, 2)
-  let x = str.PadLeft (l, '0')
-  x |> Seq.map (fun ch -> if ch = '1' then true else false) |> Seq.toList
+let all n be = List.init n (fun _ -> be)
+
+type System.Convert with
+  static member ToBits (i : int) l =
+    let str = Convert.ToString (i, 2)
+    let x = str.PadLeft (l, '0')
+    x |> Seq.map (fun ch -> if ch = '1' then true else false) |> Seq.toList
 
 // TODO: Add more registers (X, Y, Z, I, J)
 type Register = 
   | A | B | C
-  member this.bits =
+  member this.Bits =
     match this with
       | A -> [false;false;false;false;false]
       | B -> [false;false;false;false;true]
@@ -17,19 +20,27 @@ type Register =
 
 type SourceOperand = 
   | Lit of int | Reg of Register
-  member this.bits =
+  member this.Bits =
     match this with
-      | Reg r -> false :: r.bits
-      | Lit n -> true :: toBits (n + 1) 5
-
-let all n be = List.init n (fun _ -> be)
+      | Reg r -> false :: r.Bits
+      | Lit n -> true :: Convert.ToBits (n + 1) 5
 
 type Instruction =
   | SET of Register*SourceOperand | HLT
-  member this.bits =
+  
+  member this.Bits =
     match this with
-      | SET (dst, src) -> src.bits @ dst.bits @ [false;false;false;false;true]
+      | SET (dst, src) -> src.Bits @ dst.Bits @ [false;false;false;false;true]
       | HLT            -> all 6 false @ all 5 false @ all 5 true
+  
+  // Get the raw machine code instruction, e.g:
+  // SET A, 0   --->   0x8401
+  // and
+  // SET A, B   --->   0x0401
+  member this.DumpHex () =
+    let bits = this.Bits
+    let str = String.init (bits |> List.length) (fun i -> if bits.[i] then "1" else "0")
+    ((Convert.ToInt32 (str, 2)).ToString ("X")).PadLeft (4, '0')
 
 // For FSI; doesn't get compiled (#if FALSE gets rid of annoying warnings)
 #if FALSE
