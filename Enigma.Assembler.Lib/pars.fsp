@@ -1,0 +1,25 @@
+%{
+
+%}
+
+%token <int> INT
+%token REG_A REG_B REG_C REG_X REG_Y REG_Z        // registers
+
+// opcodes
+%token SET
+%token ADD SUB MUL DIV          // math
+
+// other stuff
+%token <string> LABEL
+%token COMMA
+%token EOF
+
+%start start
+%type <string> start
+
+%%
+
+start:
+  |             { "Nothing to see here" }
+
+%%
