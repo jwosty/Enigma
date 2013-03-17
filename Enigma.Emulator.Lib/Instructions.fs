@@ -65,18 +65,26 @@ type Instruction =
     match this with
       | SET(dst, src) -> Registers.set (getUnionCase dst) (src.Eval ())
   
+  member this.Dump =
+    let bits = this.Bits
+    let str = String.init (bits |> List.length) (fun i -> if bits.[i] then "1" else "0")
+    Convert.ToInt32 (str, 2)
+  
   // Get the raw machine code instruction, e.g:
   // SET A, 0   --->   0x8401
   // and
   // SET A, B   --->   0x0401
-  member this.DumpHex () =
-    let bits = this.Bits
-    let str = String.init (bits |> List.length) (fun i -> if bits.[i] then "1" else "0")
-    ((Convert.ToInt32 (str, 2)).ToString ("X")).PadLeft (4, '0')
+  member this.HexDump =
+    (this.Dump.ToString ("X")).PadLeft (4, '0')
 
 // For FSI; doesn't get compiled (#if FALSE gets rid of annoying warnings)
 #if FALSE
-SET(B, Lit 0).bits = [true; false; false; false; false; true;    false; false; false; false; true;     false; false; false; false; true]
-SET(A, Lit 1).bits = [true; false; false; false; true; false;    false; false; false; false; false;    false; false; false; false; true]
-SET(A, Reg B).bits = [false; false; false; false; false; true;   false; false; false; false; false;    false; false; false; false; true]
+// Use to test Instruction.Bits
+SET(B, Lit 0).Bits = [true; false; false; false; false; true;    false; false; false; false; true;     false; false; false; false; true]
+SET(A, Lit 1).Bits = [true; false; false; false; true; false;    false; false; false; false; false;    false; false; false; false; true]
+SET(A, Reg B).Bits = [false; false; false; false; false; true;   false; false; false; false; false;    false; false; false; false; true]
+// Use to test Instruction.DumpHex ()
+SET(B, Lit 0).HexDump = "8421"
+SET(A, Lit 1).HexDump = "8801"
+SET(A, Reg B).HexDump = "0401"
 #endif
