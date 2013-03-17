@@ -22,6 +22,12 @@ type Register =
       | Z -> Convert.ToBits 5 5
       | I -> Convert.ToBits 6 5
       | J -> Convert.ToBits 7 5
+  
+  // Get the value of this register
+  member this.Get () = Registers.get (getUnionCase this)
+  
+  // Set the value of this register
+  member this.Set = Registers.set (getUnionCase this)
 
 // Can be either a literal value or a register
 type SourceOperand = 
@@ -68,8 +74,13 @@ type Instruction =
   member this.Eval () =
     match this with
       | Ordinary(opcode, dst, src) ->
+        let mathStore op = dst.Set (op (dst.Get ()) (src.Eval ()))
         match opcode with
-          | OrdinaryOpcode.SET -> Registers.set (getUnionCase dst) (src.Eval ())
+          | OrdinaryOpcode.SET -> dst.Set (src.Eval ())
+          | OrdinaryOpcode.ADD -> mathStore op_Addition
+          | OrdinaryOpcode.SUB -> mathStore op_Subtraction
+          | OrdinaryOpcode.DIV -> mathStore op_Division
+          | OrdinaryOpcode.MUL -> mathStore op_Multiply
           | _                  -> failwith "Ordinary opcode not implemented"
       | Special(opcode, dst)       -> failwith "Special opcode not implemented"
   
