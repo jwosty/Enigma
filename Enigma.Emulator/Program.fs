@@ -7,6 +7,12 @@ module Enigma.Emulator.Main
 open System
 open Enigma.Emulator.Lib.Instructions
 
+type Cards =
+  | Heart   of int
+  | Spade   of int
+  | Club    of int
+  | Diamond of int
+
 [<EntryPoint>]
 let main args = 
     Console.WriteLine("Hello world!")

@@ -39,31 +39,39 @@ type SourceOperand =
       // For literal values, return the value
       | Lit n -> n
 
+type OrdinaryOpcode =
+  | SET = 0x01
+  | ADD = 0x02
+  | SUB = 0x03
+  | MUL = 0x04
+  | DIV = 0x06
+
+type SpecialOpcode =
+  | JSR = 0x01
+
 // Represents a DCPU-16 instruction, like:
 // SET A, 0
-// which can be created directly with:
-// SET(A, Lit 0)
+// which can be created with:
+// Instruction.Ordinary(OrdinaryOpcode.SET, A, Lit 0)
 type Instruction =
-  | SET of Register*SourceOperand
-  | ADD of Register*SourceOperand
-  | SUB of Register*SourceOperand
-  | MUL of Register*SourceOperand
-  | DIV of Register*SourceOperand
+  | Ordinary of OrdinaryOpcode * Register * SourceOperand
+  | Special  of SpecialOpcode * Register
   
   // Get the binary representation
   member this.Bits =
     let genBits (dst : Register) (src : SourceOperand) code = src.Bits @ dst.Bits @ (Convert.ToBits code 5)
     match this with
-      | SET(dst, src) -> genBits dst src 0x01
-      | ADD(dst, src) -> genBits dst src 0x02
-      | SUB(dst, src) -> genBits dst src 0x03
-      | MUL(dst, src) -> genBits dst src 0x04
-      | DIV(dst, src) -> genBits dst src 0x06
+      | Ordinary(opcode, dst, src) -> genBits dst   src   (opcode |> int)
+      | Special(opcode, dst)       -> genBits dst (Lit 0) (opcode |> int)
   
   // Excecute the instruction
   member this.Eval () =
     match this with
-      | SET(dst, src) -> Registers.set (getUnionCase dst) (src.Eval ())
+      | Ordinary(opcode, dst, src) ->
+        match opcode with
+          | OrdinaryOpcode.SET -> Registers.set (getUnionCase dst) (src.Eval ())
+          | _                  -> failwith "Ordinary opcode not implemented"
+      | Special(opcode, dst)       -> failwith "Special opcode not implemented"
   
   member this.Dump =
     let bits = this.Bits
@@ -76,6 +84,7 @@ type Instruction =
   // SET A, B   --->   0x0401
   member this.HexDump =
     (this.Dump.ToString ("X")).PadLeft (4, '0')
+
 
 // For FSI; doesn't get compiled (#if FALSE gets rid of annoying warnings)
 #if FALSE
