@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}</ProjectGuid>
+    <ProjectGuid>{5F295854-194A-404F-9E9B-2AC745AF1D58}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DCPU16.Assembler</RootNamespace>
-    <AssemblyName>EnigmaAssembler</AssemblyName>
+    <RootNamespace>Enigma.Assembler</RootNamespace>
+    <AssemblyName>Enigma.Assembler</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,12 +18,6 @@
     <ErrorReport>prompt</ErrorReport>
     <Externalconsole>True</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="BeforeBuild" command="fsyacc ${ProjectDir}/pars.fsp --module DCPU16.Assembler.Parser; echo -e '\n-- fsyacc done --\n'; fslex ${ProjectDir}/lex.fsl --unicode; echo -e '\n-- fslex done --\n'" workingdir="" externalConsole="True" />
-        <Command type="BeforeClean" command="rm ${ProjectDir}/pars.fs ${ProjectDir}/pars.fsi ${ProjectDir}/lex.fs" />
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,14 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="pars.fsi" />
-    <Compile Include="pars.fs" />
-    <Compile Include="lex.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
-    <None Include="lex.fsl" />
-    <None Include="pars.fsp" />
+    <ProjectReference Include="..\Enigma.Assembler.Lib\Enigma.Assembler.Lib.fsproj">
+      <Project>{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}</Project>
+      <Name>Enigma.Assembler.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

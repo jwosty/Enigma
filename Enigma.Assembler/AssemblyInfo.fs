@@ -1,9 +1,9 @@
-module DCPU16.Assembler.AssemblyInfo
+module Enigma.Assembler.AssemblyInfo
 open System.Reflection
 open System.Runtime.CompilerServices
 
 
-[<assembly: AssemblyTitle("DCPU16.Assembler")>]
+[<assembly: AssemblyTitle("Enigma.Assembler")>]
 [<assembly: AssemblyDescription("")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
