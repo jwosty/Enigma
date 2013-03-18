@@ -39,7 +39,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Conversions.fs" />
     <Compile Include="DCPU16.fs" />
-    <Compile Include="Instructions.fs" />
+    <Compile Include="InstructionElements.fs" />
+    <Compile Include="Instruction.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
 </Project>
