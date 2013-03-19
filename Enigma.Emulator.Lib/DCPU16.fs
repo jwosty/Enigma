@@ -1,34 +1,18 @@
 module Enigma.Emulator.Lib.DCPU16
+open System.Collections.Generic
 
 // Readable/writeable register memory
 module Registers =
-  let mutable A = 0
-  let mutable B = 0
-  let mutable C = 0
-  let mutable X = 0
-  let mutable Y = 0
-  let mutable Z = 0
-  let mutable I = 0
-  let mutable J = 0
+  let private registers =
+    let tmpd = new Dictionary<_,_>()
+    let dictAdd (k, v) = tmpd.Add (k, v)
+    [
+      "A", 0us; "B", 0us; "C", 0us;
+      "X", 0us; "Y", 0us; "Z", 0us;
+      "I", 0us; "J", 0us;
+    ] |> List.iter (dictAdd)
+    tmpd
   
-  let get dst =
-    match dst with
-      | "A" -> A
-      | "B" -> B
-      | "C" -> C
-      | "X" -> X
-      | "Y" -> Y
-      | "Z" -> Z
-      | "I" -> I
-      | "J" -> J
+  let get reg = if registers.ContainsKey reg then registers.[reg] else failwith "No such register exists"
   
-  let set dst src =
-    match dst with
-      | "A" -> A <- src
-      | "B" -> B <- src
-      | "C" -> C <- src
-      | "X" -> X <- src
-      | "Y" -> Y <- src
-      | "Z" -> Z <- src
-      | "I" -> I <- src
-      | "J" -> J <- src
+  let set reg value = if registers.ContainsKey reg then registers.[reg] <- value else failwith "No such register exists"
