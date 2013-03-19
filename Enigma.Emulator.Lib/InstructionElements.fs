@@ -4,47 +4,42 @@ open Microsoft.FSharp.Reflection
 open Enigma.Emulator.Lib.Conversions
 open Enigma.Emulator.Lib.DCPU16
 
+type Register =
+  | A = 0x0
+  | B = 0x1
+  | C = 0x2
+  | X = 0x3
+  | Y = 0x4
+  | Z = 0x5
+  | I = 0x6
+  | J = 0x7
+
 module Ops =
-  let getUnionCase (x : 'a) =
-        match FSharpValue.GetUnionFields(x, typeof<'a>) with
-          | case, _ -> case.Name
-
   let all n be = List.init n (fun _ -> be)
-
-open Ops
-
-type Register = 
-  | A | B | C | X | Y | Z | I | J
-  member this.Bits =
-    match this with
-      | A -> Convert.ToBits 0 5
-      | B -> Convert.ToBits 1 5
-      | C -> Convert.ToBits 2 5
-      | X -> Convert.ToBits 3 5
-      | Y -> Convert.ToBits 4 5
-      | Z -> Convert.ToBits 5 5
-      | I -> Convert.ToBits 6 5
-      | J -> Convert.ToBits 7 5
+  
+  let bits (reg : Register) = Convert.ToBits (reg |> int) 5
   
   // Get the value of this register
-  member this.Get () = Registers.get (getUnionCase this)
+  let getReg (reg : Register) = Registers.get (reg |> string)
   
   // Set the value of this register
-  member this.Set = Registers.set (getUnionCase this)
+  let setReg (reg : Register) = Registers.set (reg |> string)
+
+open Ops
 
 // Can be either a literal value or a register
 type SourceOperand = 
   | Lit of int | Reg of Register
   member this.Bits =
     match this with
-      | Reg r -> false :: r.Bits
+      | Reg r -> false :: (r |> bits)
       | Lit n -> true :: Convert.ToBits (n + 1) 5
   
   // Get the value
   member this.Eval () =
     match this with
       // For regisers, read the register contents
-      | Reg r -> Registers.get (getUnionCase r)
+      | Reg r -> Registers.get (r |> string)
       // For literal values, return the value
       | Lit n -> n
 
