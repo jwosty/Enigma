@@ -19,18 +19,12 @@ module Registers =
   let set reg value = if registers.ContainsKey reg then registers.[reg] <- value else failwith "No such register exists"
 
 module RAM =
-  let private memory = Array.zeroCreate<uint16> 0xffff // Maximum memory size for the DCPU-16
+  let private memory = Array.zeroCreate<uint16> 0x10000 // Maximum memory size for the DCPU-16
   
-  let private failBadMemLoc (loc : int) = failwith <| sprintf "Bad memory location (0x%s)!" (Convert.ToString (loc, 16))
+  // Since loc is only an unsigned 16-bit integer, it's impossible to access an invalid memory location -- last valid is 0xffff
+  let read (loc : uint16) =
+    memory.[loc |> int]
   
-  let read loc =
-    try
-      memory.[loc]
-    with :? System.IndexOutOfRangeException as e ->
-      failBadMemLoc loc
-  
-  let write loc dat =
-    try
-      memory.[loc] <- dat
-    with :? System.IndexOutOfRangeException as e ->
-      failBadMemLoc loc
+  // Since loc is only an unsigned 16-bit integer, it's impossible to access an invalid memory location -- last valid is 0xffff
+  let write (loc : uint16) dat =
+    memory.[loc |> int] <- dat
