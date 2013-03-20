@@ -18,7 +18,7 @@ type Instruction =
     let genBits (dst : Register) (src : SourceOperand) code = src.Bits @ (bits dst) @ (Convert.ToBits code 5)
     match this with
       | Ordinary(opcode, dst, src) -> genBits dst   src   (opcode |> int)
-      | Special(opcode, dst)       -> genBits dst (Lit 0) (opcode |> int)
+      | Special(opcode, dst)       -> genBits dst (Lit 0us) (opcode |> int)
   
   // Excecute the instruction
   member this.Eval () =
@@ -55,11 +55,11 @@ type Instruction =
 // For FSI; doesn't get compiled (#if FALSE gets rid of annoying warnings)
 #if FALSE
 // Use to test Instruction.Bits
-SET(Register.B, Lit 0).Bits = [true; false; false; false; false; true;    false; false; false; false; true;     false; false; false; false; true]
-SET(Register.A, Lit 1).Bits = [true; false; false; false; true; false;    false; false; false; false; false;    false; false; false; false; true]
+SET(Register.B, Lit 0us).Bits = [true; false; false; false; false; true;    false; false; false; false; true;     false; false; false; false; true]
+SET(Register.A, Lit 1us).Bits = [true; false; false; false; true; false;    false; false; false; false; false;    false; false; false; false; true]
 SET(Register.A, Reg Register.B).Bits = [false; false; false; false; false; true;   false; false; false; false; false;    false; false; false; false; true]
 // Use to test Instruction.DumpHex ()
-SET(Register.B, Lit 0).HexDump = "8421"
-SET(Register.A, Lit 1).HexDump = "8801"
+SET(Register.B, Lit 0us).HexDump = "8421"
+SET(Register.A, Lit 1us).HexDump = "8801"
 SET(Register.A, Reg Register.B).HexDump = "0401"
 #endif

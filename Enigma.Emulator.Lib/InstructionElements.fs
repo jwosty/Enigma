@@ -29,11 +29,11 @@ open Ops
 
 // Can be either a literal value or a register
 type SourceOperand = 
-  | Lit of int | Reg of Register
+  | Lit of uint16 | Reg of Register
   member this.Bits =
     match this with
       | Reg r -> false :: (r |> bits)
-      | Lit n -> true :: Convert.ToBits (n + 1) 5
+      | Lit n -> true :: Convert.ToBits ((n |> int) + 1) 5
   
   // Get the value
   member this.Eval () =
