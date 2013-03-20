@@ -9,7 +9,7 @@ type System.Convert with
 
 // Note: when extracting, position 0 = MSB (usually the rightmost bit)
 let extractBits n bStart bEnd =
-  let mask = ~~~(~~~0us <<< (bEnd - bStart + 1))
+  let mask = ~~~(~~~0 <<< (bEnd - bStart + 1))
   (n >>> bStart) &&& mask
 
 // Split the instruction into its 3 components with the format:
