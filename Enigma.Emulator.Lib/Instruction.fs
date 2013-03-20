@@ -46,20 +46,28 @@ type Instruction =
   member this.HexDump =
     (this.Dump.ToString ("X")).PadLeft (4, '0')
   
-  // Creates an instruction from n
+  // Load the machine code instruction n
   static member Load n =
-    let dst, src, opcode = split n
-    ()
-
+    let srcInf, valDst, valOpcode = split n
+    let valSrc = srcInf &&& 0b011111 // The absolute destination
+    let src =
+      if (srcInf >>> 5) = 1 then // If the first bit is set
+        Lit(valSrc - 1 |> uint16) // destination is a literal
+      else
+        Reg(enum<Register> valSrc) // destination is a register
+    let dst = enum<Register> valDst
+    let opcode = enum<OrdinaryOpcode> valOpcode
+    // For now, just assume it's a basic instruction
+    Ordinary(opcode, dst, src)
 
 // For FSI; doesn't get compiled (#if FALSE gets rid of annoying warnings)
 #if FALSE
 // Use to test Instruction.Bits
-SET(Register.B, Lit 0us).Bits = [true; false; false; false; false; true;    false; false; false; false; true;     false; false; false; false; true]
-SET(Register.A, Lit 1us).Bits = [true; false; false; false; true; false;    false; false; false; false; false;    false; false; false; false; true]
-SET(Register.A, Reg Register.B).Bits = [false; false; false; false; false; true;   false; false; false; false; false;    false; false; false; false; true]
+Ordinary(OrdinaryOpcode.SET, Register.B, Lit 0us).Bits = [true; false; false; false; false; true;    false; false; false; false; true;     false; false; false; false; true]
+Ordinary(OrdinaryOpcode.SET, Register.A, Lit 1us).Bits = [true; false; false; false; true; false;    false; false; false; false; false;    false; false; false; false; true]
+Ordinary(OrdinaryOpcode.SET, Register.A, Reg Register.B).Bits = [false; false; false; false; false; true;   false; false; false; false; false;    false; false; false; false; true]
 // Use to test Instruction.DumpHex ()
-SET(Register.B, Lit 0us).HexDump = "8421"
-SET(Register.A, Lit 1us).HexDump = "8801"
-SET(Register.A, Reg Register.B).HexDump = "0401"
+Ordinary(OrdinaryOpcode.SET, Register.B, Lit 0us).HexDump = "8421"
+Ordinary(OrdinaryOpcode.SET, Register.A, Lit 1us).HexDump = "8801"
+Ordinary(OrdinaryOpcode.SET, Register.A, Reg Register.B).HexDump = "0401"
 #endif
