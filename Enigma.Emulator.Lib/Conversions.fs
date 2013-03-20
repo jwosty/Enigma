@@ -13,8 +13,8 @@ let extractBits n bStart bEnd =
   (n >>> bStart) &&& mask
 
 // Split the instruction into its 3 components with the format:
-// (destination : int, source : int, opcode : int)
+// (source : int, destination : int, opcode : int)
 let split n =
-  (extractBits n 10 15,   // Destination
-   extractBits n 5 9,     // Source
+  (extractBits n 10 15,   // Source
+   extractBits n 5 9,     // Destination
    extractBits n 0 4)     // Opcode
