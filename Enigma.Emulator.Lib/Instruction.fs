@@ -47,7 +47,7 @@ type Instruction =
     (this.Dump.ToString ("X")).PadLeft (4, '0')
   
   // Load the machine code instruction n
-  static member Load n =
+  static member LoadMachineCode n =
     let srcInf, valDst, valOpcode = split n
     let valSrc = srcInf &&& 0b011111 // The absolute destination
     let src =
