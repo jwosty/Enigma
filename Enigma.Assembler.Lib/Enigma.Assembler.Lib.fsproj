@@ -40,19 +40,15 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="FSharp.PowerPack">
-      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\FSharpPowerPack-4.0.0.0\bin\FSharp.PowerPack.dll</HintPath>
+    <Reference Include="FParsec">
+      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\FParsec\FParsecCS.dll</HintPath>
+    </Reference>
+    <Reference Include="FParsec">
+      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\FParsec\FParsec.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="pars.fsi" />
-    <Compile Include="pars.fs" />
-    <Compile Include="lex.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
-  <ItemGroup>
-    <None Include="lex.fsl" />
-    <None Include="pars.fsp" />
-  </ItemGroup>
 </Project>

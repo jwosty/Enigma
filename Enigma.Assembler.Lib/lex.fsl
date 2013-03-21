@@ -2,7 +2,7 @@
 module DCPU16.Assembler.Lexer
 open System
 open Microsoft.FSharp.Text.Lexing
-open DCPU16.Assembler.Parser
+open Enigma.Assembler.Parser
 
 let lexeme (lexbuf : LexBuffer<char>) = new System.String(lexbuf.Lexeme)
 
