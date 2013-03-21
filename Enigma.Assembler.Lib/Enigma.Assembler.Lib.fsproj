@@ -18,12 +18,6 @@
     <ErrorReport>prompt</ErrorReport>
     <Externalconsole>True</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="BeforeBuild" command="fsyacc ${ProjectDir}/pars.fsp --module DCPU16.Assembler.Parser; echo -e '\n-- fsyacc done --\n'; fslex ${ProjectDir}/lex.fsl --unicode; echo -e '\n-- fslex done --\n'" workingdir="" externalConsole="True" />
-        <Command type="BeforeClean" command="rm ${ProjectDir}/pars.fs ${ProjectDir}/pars.fsi ${ProjectDir}/lex.fs" />
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,7 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="FParsec">
+    <Reference Include="FParsecCS">
       <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\FParsec\FParsecCS.dll</HintPath>
     </Reference>
     <Reference Include="FParsec">
@@ -49,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="parser.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
 </Project>
