@@ -1,4 +1,4 @@
-module DCPU16.Assembler.AssemblyInfo
+module Enigma.Assembler.AssemblyInfo
 open System.Reflection
 open System.Runtime.CompilerServices
 
