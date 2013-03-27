@@ -8,9 +8,9 @@ let enumNamesValues<'E when 'E : comparison> =
   let values = Enum.GetValues typeof<'E>
   let result =
     List.init
-      (values.GetLength 1)
+      (values.GetLength 0)
       (fun i ->
-        let v = values.GetValue 1
+        let v = values.GetValue i
         (v |> string, unbox<'E> v))
     |> Map.ofList
   result
