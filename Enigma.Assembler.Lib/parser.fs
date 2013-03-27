@@ -15,7 +15,7 @@ let enumNamesValues<'E when 'E : comparison> =
     |> Map.ofList
   result
 
-let identifierString : Parser<string, unit> = many1Satisfy isLower .>> spaces
+let letterGroup : Parser<string, unit> = many1Satisfy isLetter .>> spaces
 let basicOpcodes = enumNamesValues<BasicOpcode>
 let isBasicOpcode x =
   match basicOpcodes.TryFind x with
