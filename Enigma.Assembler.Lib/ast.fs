@@ -10,10 +10,6 @@ type BasicOpcode =
 type SpecialOpcode =
   | JSR = 0x01
 
-type Opcode =
-  | Basic of BasicOpcode
-  | Special of SpecialOpcode
-
 type Register =
   | A = 0x0
   | B = 0x1
