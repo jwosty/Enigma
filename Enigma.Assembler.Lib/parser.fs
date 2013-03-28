@@ -23,13 +23,13 @@ let isBasicOpcode x =
     | None -> false
 
 // Try: CharStream.ParseString ("ADD SUB", 0, "ADD SUB".Length, basicOpcode, (), "")
-let basicOpcode : Parser<BasicOpcode,_> =
+let basicOpcode : Parser<Opcode,_> =
   fun stream ->
     let reply = letterGroup stream
     if reply.Status = Ok then
       printfn "Using %A" reply.Result
       match basicOpcodes.TryFind reply.Result with
-      | Some x -> Reply x
+      | Some x -> Reply(Basic x)
       | None -> Reply (Error, messageError <| "No such opcode `" + reply.Result + "'")
     else
       Reply(Error, expected <| "Two-argument opcode")
