@@ -42,28 +42,3 @@ let letterGroupSearchParserMessage stuff onMatch mismatchMessage errorMessage =
 let destinationOperand = letterGroupSearchParserMessage registers (fun x -> Reply x) "No such register" (expected "Destination operand")
 
 let basicOpcode = letterGroupSearchParserMessage basicOpcodes (fun x -> Reply x) "No such opcode" (expected "Two-argument opcode")
-
-(*
-// Note to self: refactor this and basicOpcode -- lots of duplicate code!
-// For now, destination operand can only be a register
-let destinationOperand : Parser<Register,_> =
-  fun stream ->
-    let reply = letterGroup stream
-    if reply.Status = Ok then
-      match registers.TryFind reply.Result with
-      | Some x -> Reply x
-      | None -> Reply (Error, messageError <| "No such register `" + reply.Result + "'")
-    else
-      Reply(Error, expected <| "Destination operand")
-
-// Try: CharStream.ParseString ("ADD SUB", 0, "ADD SUB".Length, basicOpcode, (), "")
-let basicOpcode : Parser<Opcode,_> =
-  fun stream ->
-    let reply = letterGroup stream
-    if reply.Status = Ok then
-      match basicOpcodes.TryFind reply.Result with
-      | Some x -> Reply (Basic x)
-      | None -> Reply (Error, messageError <| "No such opcode `" + reply.Result + "'")
-    else
-      Reply(Error, expected <| "Two-argument opcode")
-*)
