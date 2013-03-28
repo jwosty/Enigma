@@ -35,7 +35,7 @@ let letterGroupSearchParser (stuff : Map<_,_>) onMatch onMismatch onError : Pars
 let simpleLetterGroupSearchParser stuff mismatchMessage errorMessage =
   letterGroupSearchParser
     stuff
-    (fun x -> Result x)
+    (fun x -> Reply x)
     (fun reply -> Reply (Error, messageError <| mismatchMessage + " `" + reply.Result + "'"))
     (fun () -> Reply(Error, errorMessage))
 
