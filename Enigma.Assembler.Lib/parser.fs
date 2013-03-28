@@ -32,13 +32,13 @@ let letterGroupSearchParser (stuff : Map<_,_>) onMatch onMismatch onError : Pars
     else
       onError ()
 
-let letterGroupSearchParserMessage stuff onMatch mismatchMessage errorMessage =
+let simpleLetterGroupSearchParser stuff mismatchMessage errorMessage =
   letterGroupSearchParser
     stuff
-    onMatch
+    (fun x -> Result x)
     (fun reply -> Reply (Error, messageError <| mismatchMessage + " `" + reply.Result + "'"))
     (fun () -> Reply(Error, errorMessage))
 
-let destinationOperand = letterGroupSearchParserMessage registers (fun x -> Reply x) "No such register" (expected "Destination operand")
+let destinationOperand = simpleLetterGroupSearchParser registers "No such register" (expected "Destination operand")
 
-let basicOpcode = letterGroupSearchParserMessage basicOpcodes (fun x -> Reply x) "No such opcode" (expected "Two-argument opcode")
+let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such opcode" (expected "Two-argument opcode")
