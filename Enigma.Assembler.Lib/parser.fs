@@ -16,9 +16,10 @@ let enumNamesValues<'E when 'E : comparison> =
 
 let letterGroup : Parser<string, unit> = many1Satisfy isLetter .>> spaces
 let basicOpcodes = enumNamesValues<BasicOpcode>
+let specialOpcodes = enumNamesValues<SpecialOpcode>
 let registers = enumNamesValues<Register>
-
-let comma : Parser<string, unit> = pstring ","
+// A comma that can be surrounded by whitespaces
+let argSep : Parser<string, unit> = spaces >>. pstring "," .>> spaces
 
 let transformParserOutput (parser : Parser<'Result,_>) conversion =
   fun stream ->
@@ -49,10 +50,11 @@ let register = simpleLetterGroupSearchParser registers "Invalid register" (expec
 
 // For now, just use registers
 let destinationOperand = simpleLetterGroupSearchParser registers "No such register" (expected "Destination operand")
-
 // For now, just use registers
 let sourceOperand : Parser<_,_> = transformParserOutput register (fun x -> Reply(Reg x))
 
 let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such opcode" (expected "Two-argument opcode")
+let specialOpcode = simpleLetterGroupSearchParser specialOpcodes "No such opcode" (expected "One-argument opcode")
 
-let basicInstruction : Parser<_,_> = basicOpcode .>>. destinationOperand .>>. sourceOperand
+let basicInstruction : Parser<_,_> = basicOpcode .>>. destinationOperand .>> argSep .>>. sourceOperand
+let specialInstruction : Parser<_,_> = specialOpcode .>>. destinationOperand
