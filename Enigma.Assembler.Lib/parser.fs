@@ -73,4 +73,4 @@ let specialInstruction : Parser<_,_> =
 let instruction = ((attempt basicInstruction) <|> specialInstruction)
 let dasm : Parser<_,_> =
   let instructionList = many (instruction .>> (optional newline .>> spaces))
-  fun stream -> spaces >>. instructionList .>> spaces .>> eof <| stream
+  spaces >>. instructionList .>> spaces .>> eof
