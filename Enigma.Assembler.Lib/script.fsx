@@ -2,6 +2,7 @@
 #r "FParsec.dll"
 #I "/Users/alanwostenberg/Projects/FSharp/Enigma/Enigma.Assembler.Lib/"
 #load "ast.fs"
+#load "basics.fs"
 #load "parser.fs"
 open System
 open FParsec
