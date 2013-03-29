@@ -51,5 +51,3 @@ let destinationOperand = simpleLetterGroupSearchParser registers "No such regist
 let sourceOperand : Parser<_,_> = transformParserOutput register (fun x -> Reply(Reg x))
 
 let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such opcode" (expected "Two-argument opcode")
-
-type MyParser<'TResult, 'TUserState> = CharStream<'TUserState> -> Reply<'TResult>
