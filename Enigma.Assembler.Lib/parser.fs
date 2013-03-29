@@ -18,7 +18,7 @@ let letterGroup : Parser<string, unit> = many1Satisfy isLetter .>> spaces
 let basicOpcodes = enumNamesValues<BasicOpcode>
 let registers = enumNamesValues<Register>
 
-let transformParser (parser : Parser<'Result,_>) conversion =
+let transformParserOutput (parser : Parser<'Result,_>) conversion =
   fun stream ->
     let reply = parser stream
     if reply.Status = Ok then
@@ -48,7 +48,7 @@ let register = simpleLetterGroupSearchParser registers "Invalid register" (expec
 let destinationOperand = simpleLetterGroupSearchParser registers "No such register" (expected "Destination operand")
 
 // For now, just use registers
-let sourceOperand : Parser<SourceOperand, _> = transformParser register (fun x -> Reply(Reg x))
+let sourceOperand : Parser<_,_> = transformParserOutput register (fun x -> Reply(Reg x))
 
 let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such opcode" (expected "Two-argument opcode")
 
