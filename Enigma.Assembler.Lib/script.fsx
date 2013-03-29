@@ -11,3 +11,9 @@ let doParser p str =
   match (run p str) with
     | Success (r, _, _) -> Reply r
     | Failure (msg, err, _) -> Reply (Error, messageError msg)
+
+// Testing case-insensitivity and whitespaces (should parse just fine)
+run basicInstruction "AdD   \t  X,  \t\t   j"
+
+// This shouldn't work (has a whitespace in the middle)
+run basicInstruction "ADD \nA\n, \nB"

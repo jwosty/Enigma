@@ -14,12 +14,14 @@ let enumNamesValues<'E when 'E : comparison> =
     |> Map.ofList
   result
 
-let letterGroup : Parser<string, unit> = many1Satisfy isLetter .>> spaces
 let basicOpcodes = enumNamesValues<BasicOpcode>
 let specialOpcodes = enumNamesValues<SpecialOpcode>
 let registers = enumNamesValues<Register>
+// Parses whitespaces other newlines
+let ws = manyChars (pchar ' ' <|> pchar '\t')
+let letterGroup : Parser<string, unit> = many1Satisfy isLetter .>> ws
 // A comma that can be surrounded by whitespaces
-let argSep : Parser<string, unit> = spaces >>. pstring "," .>> spaces
+let argSep : Parser<string, unit> = ws >>. pstring "," .>> ws
 // Like Map.tryFind, but searches case-insensitively (only operates on string maps!)
 let tryFindCI key (map : Map<string, _>) =
   let result = ref None
