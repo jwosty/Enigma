@@ -59,8 +59,8 @@ let destinationOperand = simpleLetterGroupSearchParser registers "No such regist
 // For now, just use registers
 let sourceOperand : Parser<_,_> = transformParserOutput register (fun x -> Reply(Reg x))
 
-let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such opcode" (expected "Two-argument opcode")
-let specialOpcode = simpleLetterGroupSearchParser specialOpcodes "No such opcode" (expected "One-argument opcode")
+let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such basic opcode" (expected "Two-argument opcode")
+let specialOpcode = simpleLetterGroupSearchParser specialOpcodes "No such special opcode" (expected "One-argument opcode")
 
 let basicInstruction : Parser<_,_> =
   transformParserOutput
@@ -70,3 +70,5 @@ let specialInstruction : Parser<_,_> =
   transformParserOutput
     (specialOpcode .>>. destinationOperand)
     (fun (op, dst) -> Reply (SpecialInstruction (op, dst)))
+let instruction = ((attempt basicInstruction) <|> specialInstruction)
+let dasm = spaces >>. (sepBy1 instruction (attempt <| many1Chars newline)) .>> spaces .>> eof
