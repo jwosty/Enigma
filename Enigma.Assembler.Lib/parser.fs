@@ -17,12 +17,8 @@ let enumNamesValues<'E when 'E : comparison> =
 let letterGroup : Parser<string, unit> = many1Satisfy isLetter .>> spaces
 let basicOpcodes = enumNamesValues<BasicOpcode>
 let registers = enumNamesValues<Register>
-let isBasicOpcode x =
-  match basicOpcodes.TryFind x with
-    | Some _ -> true
-    | None -> false
 
-let transformParser<'Result> (parser : Parser<'Result,_>) conversion =
+let transformParser (parser : Parser<'Result,_>) conversion =
   fun stream ->
     let reply = parser stream
     if reply.Status = Ok then
