@@ -52,6 +52,7 @@ let simpleLetterGroupSearchParser stuff mismatchMessage errorMessage =
     (fun reply -> Reply (Error, messageError <| mismatchMessage + " `" + reply.Result + "'"))
     (fun () -> Reply(Error, errorMessage))
 
+let literal : Parser<_, unit> = transformParserOutput puint16 (fun v -> Reply (Lit v))
 let register = simpleLetterGroupSearchParser registers "Invalid register" (expected "register")
 
 // For now, just use registers
