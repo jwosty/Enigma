@@ -22,6 +22,14 @@ let isBasicOpcode x =
     | Some _ -> true
     | None -> false
 
+let transformParser<'Result> (parser : Parser<'Result,_>) conversion =
+  fun stream ->
+    let reply = parser stream
+    if reply.Status = Ok then
+      conversion reply.Result
+    else
+      Reply(Error, reply.Error)
+
 let letterGroupSearchParser (stuff : Map<_,_>) onMatch onMismatch onError : Parser<_,_> =
   fun stream ->
     let reply = letterGroup stream
@@ -39,6 +47,13 @@ let simpleLetterGroupSearchParser stuff mismatchMessage errorMessage =
     (fun reply -> Reply (Error, messageError <| mismatchMessage + " `" + reply.Result + "'"))
     (fun () -> Reply(Error, errorMessage))
 
+let register = simpleLetterGroupSearchParser registers "Invalid register" (expected "register")
+
 let destinationOperand = simpleLetterGroupSearchParser registers "No such register" (expected "Destination operand")
 
+// For now, just use registers
+let sourceOperand : Parser<SourceOperand, _> = transformParser register (fun x -> Reply(Reg x))
+
 let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such opcode" (expected "Two-argument opcode")
+
+type MyParser<'TResult, 'TUserState> = CharStream<'TUserState> -> Reply<'TResult>

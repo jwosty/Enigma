@@ -8,5 +8,4 @@ open FParsec
 open Enigma.Assembler.Parser
 
 run basicOpcode "SET"
-
 run destinationOperand "C"
