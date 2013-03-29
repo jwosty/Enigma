@@ -24,7 +24,12 @@ type Register =
   | I = 0x6
   | J = 0x7
 
+type DestinationOperand =
+  | Reg of Register
+  | Label of string
+
 type SourceOperand =
+  | Lit of uint16
   | Reg of Register
   | Label of string
 
