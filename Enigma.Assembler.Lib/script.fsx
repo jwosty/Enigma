@@ -15,7 +15,7 @@ let doParser p str =
 // Testing case-insensitivity and whitespaces (should parse just fine)
 run basicInstruction "AdD   \t  X,  \t\t   j"
 
-// This shouldn't work (has a whitespace in the middle)
+// This shouldn't work (has a newline in the middle)
 run basicInstruction "ADD \nA\n, \nB"
 
-runParserOnFile basicInstruction () "/Users/alanwostenberg/Projects/FSharp/Enigma/Enigma.Assembler.Lib/sample.dasm" System.Text.Encoding.Default
+runParserOnFile dasm () "/Users/alanwostenberg/Projects/FSharp/Enigma/Enigma.Assembler.Lib/sample.dasm" System.Text.Encoding.Default

@@ -28,7 +28,7 @@ let tryFindCI key (map : Map<string, _>) =
   map |> Map.iter (fun k v -> if String.Equals (key, k, System.StringComparison.CurrentCultureIgnoreCase) then result := Some v)
   !result
 
-let transformParserOutput (parser : Parser<'Result,_>) conversion =
+let transformParserOutput (parser : Parser<'TResult,_>) conversion =
   fun stream ->
     let reply = parser stream
     if reply.Status = Ok then
@@ -71,4 +71,6 @@ let specialInstruction : Parser<_,_> =
     (specialOpcode .>>. destinationOperand)
     (fun (op, dst) -> Reply (SpecialInstruction (op, dst)))
 let instruction = ((attempt basicInstruction) <|> specialInstruction)
-let dasm = spaces >>. (sepBy1 instruction (attempt <| many1Chars newline)) .>> spaces .>> eof
+let dasm : Parser<_,_> =
+  let instructionList = many (instruction .>> (optional newline .>> spaces))
+  fun stream -> spaces >>. instructionList .>> spaces .>> eof <| stream
