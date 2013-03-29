@@ -28,7 +28,8 @@ let tryFindCI key (map : Map<string, _>) =
   map |> Map.iter (fun k v -> if String.Equals (key, k, System.StringComparison.CurrentCultureIgnoreCase) then result := Some v)
   !result
 
-let transformParserOutput (parser : Parser<'TResult,_>) conversion =
+// Executes the given parser and applies the convertsion to the reult (on success)
+let (!=) (parser : Parser<'TResult,_>) conversion =
   fun stream ->
     let reply = parser stream
     if reply.Status = Ok then
@@ -52,25 +53,21 @@ let simpleLetterGroupSearchParser stuff mismatchMessage errorMessage =
     (fun reply -> Reply (Error, messageError <| mismatchMessage + " `" + reply.Result + "'"))
     (fun () -> Reply(Error, errorMessage))
 
-let literal : Parser<_, unit> = transformParserOutput puint16 (fun v -> Reply (Lit v))
+let literal : Parser<_, unit> = puint16 != (fun v -> Reply (Lit v))
 let register = simpleLetterGroupSearchParser registers "Invalid register" (expected "register")
 
 // For now, just use registers
 let destinationOperand = simpleLetterGroupSearchParser registers "No such register" (expected "Destination operand")
 // For now, just use registers
-let sourceOperand : Parser<_,_> = transformParserOutput register (fun x -> Reply(Reg x))
+let sourceOperand : Parser<_,_> = register != (fun x -> Reply(Reg x))
 
 let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such basic opcode" (expected "Two-argument opcode")
 let specialOpcode = simpleLetterGroupSearchParser specialOpcodes "No such special opcode" (expected "One-argument opcode")
 
-let basicInstruction : Parser<_,_> =
-  transformParserOutput
-    (basicOpcode .>>. destinationOperand .>> argSep .>>. sourceOperand)
-    (fun ((op, dst), src) -> Reply (BasicInstruction (op, dst, src)))
-let specialInstruction : Parser<_,_> =
-  transformParserOutput
-    (specialOpcode .>>. destinationOperand)
-    (fun (op, dst) -> Reply (SpecialInstruction (op, dst)))
+let basicInstruction : Parser<_,_> = (basicOpcode .>>. destinationOperand .>> argSep .>>. sourceOperand) !=
+                                     (fun ((op, dst), src) -> Reply (BasicInstruction (op, dst, src)))
+let specialInstruction : Parser<_,_> = (specialOpcode .>>. destinationOperand) !=
+                                       (fun (op, dst) -> Reply (SpecialInstruction (op, dst)))
 let instruction = ((attempt basicInstruction) <|> specialInstruction)
 let dasm : Parser<_,_> =
   let instructionList = many (instruction .>> (optional newline .>> spaces))
