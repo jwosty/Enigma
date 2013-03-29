@@ -11,6 +11,3 @@ let doParser p str =
   match (run p str) with
     | Success (r, _, _) -> Reply r
     | Failure (msg, err, _) -> Reply (Error, messageError msg)
-
-doParser basicOpcode "SET"
-doParser destinationOperand "C"

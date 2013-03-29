@@ -20,6 +20,11 @@ let specialOpcodes = enumNamesValues<SpecialOpcode>
 let registers = enumNamesValues<Register>
 // A comma that can be surrounded by whitespaces
 let argSep : Parser<string, unit> = spaces >>. pstring "," .>> spaces
+// Like Map.tryFind, but searches case-insensitively (only operates on string maps!)
+let tryFindCI key (map : Map<string, _>) =
+  let result = ref None
+  map |> Map.iter (fun k v -> if String.Equals (key, k, System.StringComparison.CurrentCultureIgnoreCase) then result := Some v)
+  !result
 
 let transformParserOutput (parser : Parser<'Result,_>) conversion =
   fun stream ->
@@ -33,12 +38,11 @@ let letterGroupSearchParser (stuff : Map<_,_>) onMatch onMismatch onError : Pars
   fun stream ->
     let reply = letterGroup stream
     if reply.Status = Ok then
-      match stuff.TryFind reply.Result with
+      match stuff |> tryFindCI reply.Result with
         | Some x -> onMatch x
         | None -> onMismatch reply
     else
       onError ()
-
 let simpleLetterGroupSearchParser stuff mismatchMessage errorMessage =
   letterGroupSearchParser
     stuff
