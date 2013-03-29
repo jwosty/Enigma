@@ -59,7 +59,7 @@ let register = simpleLetterGroupSearchParser registers "Invalid register" (expec
 // For now, just use registers
 let destinationOperand = simpleLetterGroupSearchParser registers "No such register" (expected "Destination operand")
 // For now, just use registers
-let sourceOperand : Parser<_,_> = register >! (fun x -> Reply(Reg x))
+let sourceOperand : Parser<_,_> = attempt literal <|> (register >! (fun r -> Reply (Reg r)))
 
 let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such basic opcode" (expected "Two-argument opcode")
 let specialOpcode = simpleLetterGroupSearchParser specialOpcodes "No such special opcode" (expected "One-argument opcode")
