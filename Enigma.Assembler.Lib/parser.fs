@@ -56,5 +56,11 @@ let sourceOperand : Parser<_,_> = transformParserOutput register (fun x -> Reply
 let basicOpcode = simpleLetterGroupSearchParser basicOpcodes "No such opcode" (expected "Two-argument opcode")
 let specialOpcode = simpleLetterGroupSearchParser specialOpcodes "No such opcode" (expected "One-argument opcode")
 
-let basicInstruction : Parser<_,_> = basicOpcode .>>. destinationOperand .>> argSep .>>. sourceOperand
-let specialInstruction : Parser<_,_> = specialOpcode .>>. destinationOperand
+let basicInstruction : Parser<_,_> =
+  transformParserOutput
+    (basicOpcode .>>. destinationOperand .>> argSep .>>. sourceOperand)
+    (fun ((op, dst), src) -> Reply (BasicInstruction (op, dst, src)))
+let specialInstruction : Parser<_,_> =
+  transformParserOutput
+    (specialOpcode .>>. destinationOperand)
+    (fun (op, dst) -> Reply (SpecialInstruction (op, dst)))
