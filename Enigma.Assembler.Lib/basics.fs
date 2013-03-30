@@ -35,7 +35,7 @@ let (>!) (parser : Parser<'TResult,_>) conversion =
     if reply.Status = Ok then
       conversion reply.Result
     else
-      Reply(Error, reply.Error)
+      Reply(reply.Status, reply.Error)
 
 let letterGroupSearchParser (stuff : Map<_,_>) onMatch onMismatch onError : Parser<_,_> =
   fun stream ->
