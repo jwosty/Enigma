@@ -2,51 +2,43 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}</ProjectGuid>
+    <ProjectGuid>{C1642351-1003-413D-879A-E4B663CBBB31}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>DCPU16.Assembler.Lib</RootNamespace>
-    <AssemblyName>EnigmaAssembler.Lib</AssemblyName>
+    <RootNamespace>Enigma.Assembler.Lib</RootNamespace>
+    <AssemblyName>Enigma.Assembler.Lib</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <Externalconsole>True</Externalconsole>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget />
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget />
+    <ConsolePause>false</ConsolePause>
     <Tailcalls>true</Tailcalls>
-    <Externalconsole>True</Externalconsole>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="FParsecCS">
-      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\4.0\FParsecCS.dll</HintPath>
-    </Reference>
-    <Reference Include="FParsec">
-      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\4.0\FParsec.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="ast.fs" />
-    <Compile Include="basics.fs" />
-    <Compile Include="parser.fs" />
-    <Compile Include="script.fsx" />
+    <Compile Include="Component1.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
 </Project>

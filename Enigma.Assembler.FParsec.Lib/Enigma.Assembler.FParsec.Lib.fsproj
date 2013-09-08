@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3851F6C4-32C2-41FD-8905-498EBBECCD9E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>EnigmaTool</RootNamespace>
-    <AssemblyName>EnigmaTool</AssemblyName>
+    <ProjectGuid>{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DCPU16.Assembler.Lib</RootNamespace>
+    <AssemblyName>EnigmaAssembler.Lib</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,20 +34,19 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="FParsecCS">
+      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\4.0\FParsecCS.dll</HintPath>
+    </Reference>
+    <Reference Include="FParsec">
+      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\Current\lib\mono\4.0\FParsec.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="ast.fs" />
+    <Compile Include="basics.fs" />
+    <Compile Include="parser.fs" />
+    <Compile Include="script.fsx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\Enigma.Emulator.Lib\Enigma.Emulator.Lib.fsproj">
-      <Project>{F012E375-5DE6-4A21-A1B6-CEFA1341A161}</Project>
-      <Name>Enigma.Emulator.Lib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Enigma.Assembler.FParsec.Lib\Enigma.Assembler.FParsec.Lib.fsproj">
-      <Project>{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}</Project>
-      <Name>Enigma.Assembler.FParsec.Lib</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

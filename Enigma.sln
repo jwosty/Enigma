@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Enigma.Assembler.Lib", "Enigma.Assembler.Lib\Enigma.Assembler.Lib.fsproj", "{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}"
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Enigma.Assembler.FParsec.Lib", "Enigma.Assembler.FParsec.Lib\Enigma.Assembler.FParsec.Lib.fsproj", "{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}"
 EndProject
 Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Enigma.Emulator.Lib", "Enigma.Emulator.Lib\Enigma.Emulator.Lib.fsproj", "{F012E375-5DE6-4A21-A1B6-CEFA1341A161}"
 EndProject
 Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "EnigmaTool", "EnigmaTool\EnigmaTool.fsproj", "{3851F6C4-32C2-41FD-8905-498EBBECCD9E}"
+EndProject
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Enigma.Assembler.Lib", "Enigma.Assembler.Lib\Enigma.Assembler.Lib.fsproj", "{C1642351-1003-413D-879A-E4B663CBBB31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}.Debug|x86.Build.0 = Debug|x86
 		{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}.Release|x86.ActiveCfg = Release|x86
 		{6BE65F5E-74F3-4BC3-9ECD-F8ED6E118AF3}.Release|x86.Build.0 = Release|x86
+		{C1642351-1003-413D-879A-E4B663CBBB31}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C1642351-1003-413D-879A-E4B663CBBB31}.Debug|x86.Build.0 = Debug|Any CPU
+		{C1642351-1003-413D-879A-E4B663CBBB31}.Release|x86.ActiveCfg = Release|Any CPU
+		{C1642351-1003-413D-879A-E4B663CBBB31}.Release|x86.Build.0 = Release|Any CPU
 		{F012E375-5DE6-4A21-A1B6-CEFA1341A161}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{F012E375-5DE6-4A21-A1B6-CEFA1341A161}.Debug|x86.Build.0 = Debug|Any CPU
 		{F012E375-5DE6-4A21-A1B6-CEFA1341A161}.Release|x86.ActiveCfg = Release|Any CPU

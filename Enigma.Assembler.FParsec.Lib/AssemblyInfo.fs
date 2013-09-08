@@ -1,14 +1,14 @@
-module Enigma.Assembler.Lib.AssemblyInfo
+module Enigma.Assembler.AssemblyInfo
 open System.Reflection
 open System.Runtime.CompilerServices
 
 
-[<assembly: AssemblyTitle("Enigma.Assembler.Lib")>]
+[<assembly: AssemblyTitle("DCPU16.Assembler")>]
 [<assembly: AssemblyDescription("")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
 [<assembly: AssemblyProduct("")>]
-[<assembly: AssemblyCopyright("alanwostenberg")>]
+[<assembly: AssemblyCopyright("J. Wostenberg")>]
 [<assembly: AssemblyTrademark("")>]
 
 // The assembly version has the format {Major}.{Minor}.{Build}.{Revision}
