@@ -34,5 +34,16 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = EnigmaTool\EnigmaTool.fsproj
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.inheritsSet = null
+		$1.scope = text/x-fsharp
+		$0.TextStylePolicy = $2
+		$2.FileWidth = 120
+		$2.TabWidth = 2
+		$2.IndentWidth = 2
+		$2.inheritsSet = VisualStudio
+		$2.inheritsScope = text/plain
+		$2.scope = text/plain
 	EndGlobalSection
 EndGlobal
