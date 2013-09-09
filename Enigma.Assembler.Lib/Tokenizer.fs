@@ -3,7 +3,7 @@
 // Pad, right-click on the project node, choose 'Options --> Build --> General' and change the target
 // framework to .NET 4.0 or .NET 4.5.
 
-namespace Enigma.Assembler.Lib
+module Enigma.Assembler.Lib.Tokenizer
 open System.Text.RegularExpressions
 
 module Tokens =
@@ -31,3 +31,17 @@ module Tokens =
     | Lit of uint16
     | Reg of Register
     | Label of string
+
+let opcodeChars = ['a'..'z'] @ ['A'..'Z']
+let literalChars = ['0'..'9']
+let whitespaceChars = [' '; '\t']
+
+let isWhitespace c = c = ' ' || c = '\t'
+
+// Pretty much just scans the string until a whitespace is reached
+let rec scanForWord currentToken (rest: string) =
+  if isWhitespace (rest.[0]) then
+    // We're at the end of the word; we're done here
+    (currentToken, rest)
+  else
+    scanForWord (currentToken + string rest.[0]) (rest.[1..(rest.Length - 1)])
