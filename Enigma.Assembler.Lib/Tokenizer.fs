@@ -44,10 +44,10 @@ let rec skipWhitespaces (s: string) =
   else
     skipWhitespaces (s.[1..(s.Length - 1)])
 
-// Pretty much just scans the string until a whitespace is reached
-let rec scanForWord currentToken (rest: string) =
+// Scans the string until a whitespace is reached (assuming no whitespaces in the beginning!)
+let rec takeToken currentToken (rest: string) =
   if isWhitespace (rest.[0]) then
     // We're at the end of the word; we're done here
     (currentToken, rest)
   else
-    scanForWord (currentToken + string rest.[0]) (rest.[1..(rest.Length - 1)])
+    takeUntilToken (currentToken + string rest.[0]) (rest.[1..(rest.Length - 1)])
