@@ -52,4 +52,11 @@ let rec takeToken currentChars (rest: string) =
     (currentChars, rest)
   else
     takeToken (currentChars + string rest.[0]) (rest.[1..(rest.Length - 1)])
-  
+
+let rec tokenize (prevTokens: string list) (s: string) =
+  if s.Length = 0 then
+    prevTokens
+  else
+    // Parse the next token, ignoring whitespaces before it
+    let token, rest = skipWhitespaces s |> takeToken ""
+    tokenize (prevTokens @ [token]) rest
