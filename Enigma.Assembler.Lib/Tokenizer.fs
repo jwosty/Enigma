@@ -50,4 +50,4 @@ let rec takeToken currentToken (rest: string) =
     // We're at the end of the word; we're done here
     (currentToken, rest)
   else
-    takeUntilToken (currentToken + string rest.[0]) (rest.[1..(rest.Length - 1)])
+    takeToken (currentToken + string rest.[0]) (rest.[1..(rest.Length - 1)])
