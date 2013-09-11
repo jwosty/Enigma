@@ -39,15 +39,17 @@ let whitespaceChars = [' '; '\t']
 let isWhitespace c = c = ' ' || c = '\t'
 
 let rec skipWhitespaces (s: string) =
-  if not <| isWhitespace (s.[0]) then
+  if (s.Length = 0) || not <| isWhitespace (s.[0]) then
     s
   else
     skipWhitespaces (s.[1..(s.Length - 1)])
 
 // Scans the string until a whitespace is reached (assuming no whitespaces in the beginning!)
-let rec takeToken currentToken (rest: string) =
-  if isWhitespace (rest.[0]) then
+let rec takeToken currentChars (rest: string) =
+  // Stop if either the end of the string or a whitespace has been reached
+  if (rest.Length = 0) || isWhitespace (rest.[0]) then
     // We're at the end of the word; we're done here
-    (currentToken, rest)
+    (currentChars, rest)
   else
-    takeToken (currentToken + string rest.[0]) (rest.[1..(rest.Length - 1)])
+    takeToken (currentChars + string rest.[0]) (rest.[1..(rest.Length - 1)])
+  
