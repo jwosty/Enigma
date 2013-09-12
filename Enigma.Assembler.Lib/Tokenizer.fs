@@ -5,36 +5,35 @@
 
 module Enigma.Assembler.Lib.Tokenizer
 open System.Text.RegularExpressions
+open Microsoft.FSharp.Reflection
 
-module Tokens =
-  type BasicOpcode =
-    | SET = 0x01
-    | ADD = 0x02
-    | SUB = 0x03
-    | MUL = 0x04
-    | DIV = 0x06
-  type SpecialOpcode =
-    | JSR = 0x01
-  type Register =
-    | RegA = 0x00
-    | RegB = 0x01
-    | RegC = 0x02
-    | RegX = 0x03
-    | RegY = 0x04
-    | RegZ = 0x05
-    | RegI = 0x06
-    | RegJ = 0x07
-  type DestinationOperand =
-    | Reg of Register
-    | Label of string
-  type SourceOperand =
-    | Lit of uint16
-    | Reg of Register
-    | Label of string
-
-let opcodeChars = ['a'..'z'] @ ['A'..'Z']
-let literalChars = ['0'..'9']
-let whitespaceChars = [' '; '\t']
+type Token =
+  | SET
+  | ADD
+  | SUB
+  | MUL
+  | DIV
+  
+  | JSR
+  
+  | RegA
+  | RegB
+  | RegC
+  | RegX
+  | RegY
+  | RegZ
+  | RegI
+  | RegJ
+  
+  | LeftBracket
+  | RightBracket
+  
+  // Returns the string regex that matches for the token
+  static member getRegex token =
+    match token with
+      | LeftBracket -> "["
+      | RightBracket -> "]"
+      | _ -> string token
 
 let isWhitespace c = c = ' ' || c = '\t'
 
@@ -45,18 +44,18 @@ let rec skipWhitespaces (s: string) =
     skipWhitespaces (s.[1..(s.Length - 1)])
 
 // Scans the string until a whitespace is reached (assuming no whitespaces in the beginning!)
-let rec takeToken currentChars (rest: string) =
+let rec takeToken currentToken currentChars (rest: string) =
   // Stop if either the end of the string or a whitespace has been reached
   if (rest.Length = 0) || isWhitespace (rest.[0]) then
     // We're at the end of the word; we're done here
     (currentChars, rest)
   else
-    takeToken (currentChars + string rest.[0]) (rest.[1..(rest.Length - 1)])
+    takeToken currentToken (currentChars + string rest.[0]) (rest.[1..(rest.Length - 1)])
 
 let rec tokenize (prevTokens: string list) (s: string) =
   if s.Length = 0 then
     prevTokens
   else
     // Parse the next token, ignoring whitespaces before it
-    let token, rest = skipWhitespaces s |> takeToken ""
+    let token, rest = skipWhitespaces s |> takeToken () ""
     tokenize (prevTokens @ [token]) rest
