@@ -36,6 +36,14 @@ type Token =
   // Returns the string regex that matches for the token
   static member GetRegex token =
     match token with
+      | RegA -> "A"
+      | RegB -> "B"
+      | RegC -> "C"
+      | RegX -> "X"
+      | RegY -> "Y"
+      | RegZ -> "Z"
+      | RegI -> "I"
+      | RegJ -> "J"
       | LeftBracket -> "\["
       | RightBracket -> "\]"
       | Comma -> "\,"
@@ -50,15 +58,6 @@ let rec skipWhitespaces (s: string) =
     s
   else
     skipWhitespaces (s.[1..(s.Length - 1)])
-
-// Scans the string until a whitespace is reached (assuming no whitespaces in the beginning!)
-let rec oldTakeToken currentToken currentChars (rest: string) =
-  // Stop if either the end of the string or a whitespace has been reached
-  if (rest.Length = 0) || isWhitespace (rest.[0]) then
-    // We're at the end of the word; we're done here
-    (currentChars, rest)
-  else
-    oldTakeToken currentToken (currentChars + string rest.[0]) (rest.[1..(rest.Length - 1)])
 
 // Identifies the next token, returns it (in the form of a Token), and returns the rest of the string
 let takeToken input =
