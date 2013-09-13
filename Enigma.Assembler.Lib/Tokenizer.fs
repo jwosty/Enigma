@@ -55,7 +55,7 @@ type Token =
       | Newlines -> "[\f\n\r]+"
       | EOF -> "$"
       // By default, the token regex is just the token name itself and not a separator 
-      | _ -> this.Name
+      | _ -> unionCaseName this
   
   // Tells whether or not a token is 
   member this.isSeparator =
@@ -66,8 +66,6 @@ type Token =
       | Whitespaces -> true
       | EOF -> true
       | _ -> false
-    
-  member this.Name = (fst <| FSharpValue.GetUnionFields(this, typeof<Token>)).Name
 
 // Identifies the next token, returns it (in the form of a Token), and returns the rest of the string
 let takeToken input =
