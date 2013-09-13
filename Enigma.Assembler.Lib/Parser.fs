@@ -13,8 +13,9 @@ let nameRegisterMap =
   |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||]))
   |> Map.ofArray
 
-let tokenToOpcode tok : Opcode option =
+// Converts a token to a case of a discriminated union using a map; returns none if not found
+let tokenToCase tok (map: Map<_, string>) : Opcode option =
   try
-    Some(unbox nameOpcodeMap.[unionCaseName tok])
+    Some(unbox map.[unionCaseName tok])
   with
     :? System.Collections.Generic.KeyNotFoundException -> None
