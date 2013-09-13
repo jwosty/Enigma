@@ -7,8 +7,8 @@ open Tokenizer
 
 let opcodeNameCaseMap = FSharpType.GetUnionCases(typeof<Opcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
 
-let tokenToOpcode tok =
+let tokenToOpcode tok : Opcode option =
   try
-    Some(opcodeNameCaseMap.[unionCaseName tok])
+    Some(unbox opcodeNameCaseMap.[unionCaseName tok])
   with
     :? System.Collections.Generic.KeyNotFoundException -> None
