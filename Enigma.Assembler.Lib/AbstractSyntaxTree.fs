@@ -42,3 +42,7 @@ type Opcode =
   | INT | IAG | IAS | IAQ
   // Hardware devices
   | HWN | HWQ | HWI
+
+type Instruction =
+  | BasicInstruction of Opcode * Value * Value
+  | SpecialInstruction of Opcode * Value * Value
