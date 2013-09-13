@@ -33,21 +33,24 @@ type Token =
   | RightBracket
   | Comma
   
-  // Returns the string regex that matches for the token
-  static member GetRegex token =
+  // Returns a tuple containing the token's string regex and whether or not the token is a type of
+  // separator (for tokens that aren't, then two or more successive instances of these tokens must
+  // be separated with one or more separating tokens)  
+  static member GetRegexAndInfo token =
     match token with
-      | RegA -> "A"
-      | RegB -> "B"
-      | RegC -> "C"
-      | RegX -> "X"
-      | RegY -> "Y"
-      | RegZ -> "Z"
-      | RegI -> "I"
-      | RegJ -> "J"
-      | LeftBracket -> "\["
-      | RightBracket -> "\]"
-      | Comma -> "\,"
-      | _ -> token.Name
+      | RegA -> ("A", false)
+      | RegB -> ("B", false)
+      | RegC -> ("C", false)
+      | RegX -> ("X", false)
+      | RegY -> ("Y", false)
+      | RegZ -> ("Z", false)
+      | RegI -> ("I", false)
+      | RegJ -> ("J", false)
+      | LeftBracket -> ("\[", true)
+      | RightBracket -> ("\]", true)
+      | Comma -> ("\,", true)
+      // By default, the token regex is just the token name itself and not a separator 
+      | _ -> (token.Name, false)
   
   member this.Name = (fst <| FSharpValue.GetUnionFields(this, typeof<Token>)).Name
 
@@ -64,7 +67,7 @@ let takeToken input =
   let tokens = FSharpType.GetUnionCases(typeof<Token>) |> Array.map (fun case -> FSharpValue.MakeUnion(case, [||]) :?> Token)
   let mutable result = None
   for token in tokens do
-    let matchInfo = Regex.Match(input, Token.GetRegex(token))
+    let matchInfo = Regex.Match(input, fst <| Token.GetRegexAndInfo(token))
     if matchInfo.Success then
       let capture = matchInfo.Captures.[0]
       if capture.Index = 0 then
