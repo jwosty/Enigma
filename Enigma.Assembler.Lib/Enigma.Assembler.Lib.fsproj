@@ -48,6 +48,7 @@
     <Compile Include="Tokenizer.fs" />
     <Compile Include="GeneralFunctions.fs" />
     <Compile Include="script.fsx" />
+    <Compile Include="AbstractSyntaxTree.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
 </Project>
