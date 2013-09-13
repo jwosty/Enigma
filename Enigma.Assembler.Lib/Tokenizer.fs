@@ -60,6 +60,7 @@ type Token =
       // By default, the token regex is just the token name itself and not a separator 
       | _ -> this.Name
   
+  // Tells whether or not a token is 
   member this.isSeparator =
     match this with
       | LeftBracket -> true
@@ -79,7 +80,7 @@ let takeToken input =
   // Iterate over each token
   for token in tokens do
     // Match the token's regex against the string
-    let matchInfo = Regex.Match(input, token.GetRegex)
+    let matchInfo = Regex.Match(input, token.GetRegex, RegexOptions.IgnoreCase)
     // If the match is a success and at the beginning of the string, then we've found a valid token
     if matchInfo.Success then
       let capture = matchInfo.Captures.[0]
@@ -92,7 +93,15 @@ let takeToken input =
     // If no tokens matched against the input, we've stumbled upon a syntax error!
     | None -> failwith "Assembly syntax error!"
 
-let rec tokenize (prevTokens: Token list) (s: string) =
+// A recursive tokenize function. prevToken is the Some of the previous token from the input (or
+// None if it was the beginning), prevTokens is the list of already analyzed tokens, and s is the
+// input string 
+let rec tokenize (prevToken: Token option) (prevTokens: Token list) (s: string) =
   let token, rest = takeToken s
   let currTokens = (addIf prevTokens ((<>) Whitespaces) token)
-  if token = EOF then currTokens, rest else tokenize currTokens rest
+  // If neither the previous nor the current token are separators (the string beginning counts as a
+  // separator), the input is invalid
+  match prevToken with
+    | Some pt when not (pt.isSeparator || token.isSeparator) -> failwith "Assembly syntax error!"
+    | _ -> ()
+  if token = EOF then currTokens, rest else tokenize (Some(token)) currTokens rest

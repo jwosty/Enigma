@@ -4,4 +4,4 @@
 open Enigma.Assembler.Lib
 open Tokenizer
 
-Tokenizer.tokenize [] "SET A, B"
+tokenize None [] "SET A, B"
