@@ -42,24 +42,33 @@ type Token =
   // Returns a tuple containing the token's string regex and whether or not the token is a type of
   // separator (for tokens that aren't, then two or more successive instances of these tokens must
   // be separated with one or more separating tokens)  
-  static member GetRegexAndInfo token =
-    match token with
-      | RegA -> ("A", false)
-      | RegB -> ("B", false)
-      | RegC -> ("C", false)
-      | RegX -> ("X", false)
-      | RegY -> ("Y", false)
-      | RegZ -> ("Z", false)
-      | RegI -> ("I", false)
-      | RegJ -> ("J", false)
-      | LeftBracket -> ("\[", true)
-      | RightBracket -> ("\]", true)
-      | Comma -> ("\,", true)
-      | Whitespaces -> ("\s+", true)
-      | EOF -> ("$", true)
+  member this.GetRegex =
+    match this with
+      | RegA -> "A"
+      | RegB -> "B"
+      | RegC -> "C"
+      | RegX -> "X"
+      | RegY -> "Y"
+      | RegZ -> "Z"
+      | RegI -> "I"
+      | RegJ -> "J"
+      | LeftBracket -> "\["
+      | RightBracket -> "\]"
+      | Comma -> "\,"
+      | Whitespaces -> "\s+"
+      | EOF -> "$"
       // By default, the token regex is just the token name itself and not a separator 
-      | _ -> (token.Name, false)
+      | _ -> this.Name
   
+  member this.isSeparator =
+    match this with
+      | LeftBracket -> true
+      | RightBracket -> true
+      | Comma -> true
+      | Whitespaces -> true
+      | EOF -> true
+      | _ -> false
+    
   member this.Name = (fst <| FSharpValue.GetUnionFields(this, typeof<Token>)).Name
 
 // Identifies the next token, returns it (in the form of a Token), and returns the rest of the string
@@ -70,22 +79,21 @@ let takeToken input =
   // Iterate over each token
   for token in tokens do
     // Match the token's regex against the string
-    let matchInfo = Regex.Match(input, fst <| Token.GetRegexAndInfo(token))
-    // If the match is a success and at the beginning of the string, then that's the right token
+    let matchInfo = Regex.Match(input, token.GetRegex)
+    // If the match is a success and at the beginning of the string, then we've found a valid token
     if matchInfo.Success then
       let capture = matchInfo.Captures.[0]
       if capture.Index = 0 then
+        // But wait! If the previous token wasn't a separator and this one isn't either, that's bad!
+        // Example: "JSRA" is invalid -- it needs a separator token to tokenize right, like "JSR A"
         result <- Some(token, input.[(capture.Length)..(input.Length - 1)])
   match result with
     | Some r -> r
     // If no tokens matched against the input, we've stumbled upon a syntax error!
     | None -> failwith "Assembly syntax error!"
 
-let skipWhitespaces (s: string) =
-  let token, rest = takeToken s
-  if (token = Whitespaces) then rest else s
-
 let rec tokenize (prevTokens: Token list) (s: string) =
   let token, rest = takeToken s
+  if token
   let currTokens = (addIf prevTokens ((<>) Whitespaces) token)
   if token = EOF then currTokens, rest else tokenize currTokens rest
