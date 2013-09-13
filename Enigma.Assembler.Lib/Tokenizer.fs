@@ -6,6 +6,7 @@
 module Enigma.Assembler.Lib.Tokenizer
 open System.Text.RegularExpressions
 open Microsoft.FSharp.Reflection
+open Enigma.Assembler.Lib
 open GeneralFunctions
 
 type Token =
@@ -79,7 +80,7 @@ let skipWhitespaces (s: string) =
 
 let rec tokenize (prevTokens: Token list) (s: string) =
   let token, rest = takeToken s
-  (addIf prevTokens ((=) Whitespaces) token), rest
+  (addIf prevTokens ((<>) Whitespaces) token), rest
   (*
   let rest = skipWhitespaces s
   if rest.Length = 0 then
