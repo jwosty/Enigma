@@ -9,6 +9,13 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Enigma.Assembler.Lib</RootNamespace>
     <AssemblyName>Enigma.Assembler.Lib</AssemblyName>
+    <BuildOrder>
+      <BuildOrder>
+        <String>AssemblyInfo.fs</String>
+        <String>GeneralFunctions.fs</String>
+        <String>Tokenizer.fs</String>
+      </BuildOrder>
+    </BuildOrder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +46,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Tokenizer.fs" />
+    <Compile Include="GeneralFunctions.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
 </Project>

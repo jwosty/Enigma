@@ -6,6 +6,7 @@
 module Enigma.Assembler.Lib.Tokenizer
 open System.Text.RegularExpressions
 open Microsoft.FSharp.Reflection
+open GeneralFunctions
 
 type Token =
   // Registers and the like
@@ -33,6 +34,9 @@ type Token =
   | RightBracket
   | Comma
   
+  // ... yeah
+  | Whitespaces
+  
   // Returns a tuple containing the token's string regex and whether or not the token is a type of
   // separator (for tokens that aren't, then two or more successive instances of these tokens must
   // be separated with one or more separating tokens)  
@@ -49,18 +53,11 @@ type Token =
       | LeftBracket -> ("\[", true)
       | RightBracket -> ("\]", true)
       | Comma -> ("\,", true)
+      | Whitespaces -> ("\s+", true)
       // By default, the token regex is just the token name itself and not a separator 
       | _ -> (token.Name, false)
   
   member this.Name = (fst <| FSharpValue.GetUnionFields(this, typeof<Token>)).Name
-
-let isWhitespace c = c = ' ' || c = '\t'
-
-let rec skipWhitespaces (s: string) =
-  if (s.Length = 0) || not <| isWhitespace (s.[0]) then
-    s
-  else
-    skipWhitespaces (s.[1..(s.Length - 1)])
 
 // Identifies the next token, returns it (in the form of a Token), and returns the rest of the string
 let takeToken input =
@@ -76,7 +73,14 @@ let takeToken input =
     | Some r -> r
     | None -> failwith "Assembly syntax error!"
 
+let skipWhitespaces (s: string) =
+  let token, rest = takeToken s
+  if (token = Whitespaces) then rest else s
+
 let rec tokenize (prevTokens: Token list) (s: string) =
+  let token, rest = takeToken s
+  (addIf prevTokens ((=) Whitespaces) token), rest
+  (*
   let rest = skipWhitespaces s
   if rest.Length = 0 then
     prevTokens
@@ -84,3 +88,4 @@ let rec tokenize (prevTokens: Token list) (s: string) =
     // Parse the next token, ignoring whitespaces before it
     let token, rest = takeToken rest
     tokenize (prevTokens @ [token]) rest
+  *)
