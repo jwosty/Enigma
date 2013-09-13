@@ -65,15 +65,20 @@ type Token =
 // Identifies the next token, returns it (in the form of a Token), and returns the rest of the string
 let takeToken input =
   let tokens = FSharpType.GetUnionCases(typeof<Token>) |> Array.map (fun case -> FSharpValue.MakeUnion(case, [||]) :?> Token)
+  // Ugg, is there a more functional way to do this (without mutables)? I really hate this...
   let mutable result = None
+  // Iterate over each token
   for token in tokens do
+    // Match the token's regex against the string
     let matchInfo = Regex.Match(input, fst <| Token.GetRegexAndInfo(token))
+    // If the match is a success and at the beginning of the string, then that's the right token
     if matchInfo.Success then
       let capture = matchInfo.Captures.[0]
       if capture.Index = 0 then
         result <- Some(token, input.[(capture.Length)..(input.Length - 1)])
   match result with
     | Some r -> r
+    // If no tokens matched against the input, we've stumbled upon a syntax error!
     | None -> failwith "Assembly syntax error!"
 
 let skipWhitespaces (s: string) =
