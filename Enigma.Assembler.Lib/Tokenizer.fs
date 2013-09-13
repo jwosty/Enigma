@@ -35,8 +35,9 @@ type Token =
   | RightBracket
   | Comma
   
-  // ... yeah
+  // Other
   | Whitespaces
+  | EOF
   
   // Returns a tuple containing the token's string regex and whether or not the token is a type of
   // separator (for tokens that aren't, then two or more successive instances of these tokens must
@@ -55,6 +56,7 @@ type Token =
       | RightBracket -> ("\]", true)
       | Comma -> ("\,", true)
       | Whitespaces -> ("\s+", true)
+      | EOF -> ("$", true)
       // By default, the token regex is just the token name itself and not a separator 
       | _ -> (token.Name, false)
   
@@ -80,7 +82,11 @@ let skipWhitespaces (s: string) =
 
 let rec tokenize (prevTokens: Token list) (s: string) =
   let token, rest = takeToken s
-  (addIf prevTokens ((<>) Whitespaces) token), rest
+  let currTokens = (addIf prevTokens ((<>) Whitespaces) token)
+  if token = EOF then
+    currTokens, rest
+  else
+    tokenize currTokens rest
   (*
   let rest = skipWhitespaces s
   if rest.Length = 0 then
