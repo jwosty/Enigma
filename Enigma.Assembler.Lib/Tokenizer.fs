@@ -32,6 +32,7 @@ type Token =
   
   // Other
   | Whitespaces
+  | Newlines
   | EOF
   
   // Returns a tuple containing the token's string regex and whether or not the token is a type of
@@ -50,7 +51,8 @@ type Token =
       | LeftBracket -> "\["
       | RightBracket -> "\]"
       | Comma -> "\,"
-      | Whitespaces -> "\s+"
+      | Whitespaces -> "[ \t\v]+"
+      | Newlines -> "[\f\n\r]+"
       | EOF -> "$"
       // By default, the token regex is just the token name itself and not a separator 
       | _ -> this.Name
