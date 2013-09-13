@@ -13,7 +13,9 @@
       <BuildOrder>
         <String>AssemblyInfo.fs</String>
         <String>GeneralFunctions.fs</String>
+        <String>AbstractSyntaxTree.fs</String>
         <String>Tokenizer.fs</String>
+        <String>script.fsx</String>
       </BuildOrder>
     </BuildOrder>
   </PropertyGroup>
