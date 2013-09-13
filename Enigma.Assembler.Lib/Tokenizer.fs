@@ -94,6 +94,5 @@ let takeToken input =
 
 let rec tokenize (prevTokens: Token list) (s: string) =
   let token, rest = takeToken s
-  if token
   let currTokens = (addIf prevTokens ((<>) Whitespaces) token)
   if token = EOF then currTokens, rest else tokenize currTokens rest
