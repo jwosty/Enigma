@@ -83,16 +83,4 @@ let skipWhitespaces (s: string) =
 let rec tokenize (prevTokens: Token list) (s: string) =
   let token, rest = takeToken s
   let currTokens = (addIf prevTokens ((<>) Whitespaces) token)
-  if token = EOF then
-    currTokens, rest
-  else
-    tokenize currTokens rest
-  (*
-  let rest = skipWhitespaces s
-  if rest.Length = 0 then
-    prevTokens
-  else
-    // Parse the next token, ignoring whitespaces before it
-    let token, rest = takeToken rest
-    tokenize (prevTokens @ [token]) rest
-  *)
+  if token = EOF then currTokens, rest else tokenize currTokens rest
