@@ -77,5 +77,6 @@ type Token =
       | RightBracket -> true
       | Comma -> true
       | Whitespaces -> true
+      | Newlines -> true
       | EOF -> true
       | _ -> false
