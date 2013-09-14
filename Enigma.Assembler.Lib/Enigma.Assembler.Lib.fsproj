@@ -12,10 +12,12 @@
     <BuildOrder>
       <BuildOrder>
         <String>AssemblyInfo.fs</String>
-        <String>GeneralFunctions.fs</String>
         <String>AbstractSyntaxTree.fs</String>
+        <String>Tokens.fs</String>
+        <String>GeneralFunctions.fs</String>
         <String>Tokenizer.fs</String>
         <String>script.fsx</String>
+        <String>Parser.fs</String>
       </BuildOrder>
     </BuildOrder>
   </PropertyGroup>
@@ -52,6 +54,7 @@
     <Compile Include="script.fsx" />
     <Compile Include="AbstractSyntaxTree.fs" />
     <Compile Include="Parser.fs" />
+    <Compile Include="Tokens.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
 </Project>
