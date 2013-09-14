@@ -47,6 +47,14 @@ let tokenToNewlines = function
   | Token.EOF -> Some Token.EOF
   | _ -> None
 
+let tokenToLBracket = function
+  | Token.LeftBracket -> Some Token.LeftBracket
+  | _ -> None
+
+let tokenToRBracket = function
+  | Token.RightBracket -> Some Token.LeftBracket
+  | _ -> None
+
 // Converts a token to a case of a discriminated union using a map; returns none if not found
 let tokenToCase (map: Map<_, _>) tok : 'a option =
   try
@@ -65,8 +73,18 @@ let tryParse tokenToASTConversion onSucceed onFailure tokens =
 let tryParseError tokenToASTConversion expectedName onSucceed tokens =
   tryParse tokenToASTConversion onSucceed (fun tok -> failwith <| sprintf "Syntax Error: Expecting %s, got `%A'" expectedName tok) tokens
 
+let parseValue tokens = tryParseError tokenToValue "Value" ret tokens
+
 // Parses a single operand
-let parseOperand tokens = tryParseError tokenToValue "Value" ret tokens
+let parseOperand tokens =
+  let b, r = tokenToLBracket (List.head tokens), List.tail tokens
+  match b with
+    | Some _ ->
+      let value, r = parseValue r
+      let _, r = tryParseError tokenToRBracket "Right Bracket" ret r
+      Pointer(value), r
+    | None ->
+      parseValue tokens
 
 // Parses two operands separated by commas
 let parseOperands tokens =
@@ -75,8 +93,7 @@ let parseOperands tokens =
   let dst, r = parseOperand r
   src, dst, r
 
-// Parses tokens until an syntax error or a newline token is reached
-// TODO: Implement pointers
+// Parses a single instruction (basic or special)
 let parseInstruction tokens =
   tryParse
     <| tokenToBasicOpcode
@@ -93,6 +110,7 @@ let parseInstruction tokens =
         <| tokens)
     <| tokens
 
+// Parses multiple instructions separated by newlines until EOF is reached
 let rec parse prevInstructions tokens: Instruction list =
   match tokens with
     | [] -> prevInstructions
