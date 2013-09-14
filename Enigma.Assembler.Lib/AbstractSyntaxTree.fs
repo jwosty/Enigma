@@ -14,10 +14,7 @@ type Value =
   // Your traditional pointer, which appears in brackets in DCPU-16 assembly, e.g. [0x2A] vs 0x2A 
   | Pointer of Value
 
-type Opcode =
-  // -----------------
-  // - Basic Opcodes -
-  // -----------------
+type BasicOpcode =
   | SET
   // Math
   | ADD | SUB
@@ -34,9 +31,7 @@ type Opcode =
   | ADX | SBX
   | STI | STD
   
-  // -------------------
-  // - Special Opcodes -
-  // -------------------
+type SpecialOpcode =
   | JSR
   // Interrupt stuff
   | INT | IAG | IAS | IAQ
@@ -44,5 +39,5 @@ type Opcode =
   | HWN | HWQ | HWI
 
 type Instruction =
-  | BasicInstruction of Opcode * Value * Value
-  | SpecialInstruction of Opcode * Value * Value
+  | BasicInstruction of BasicOpcode * Value * Value
+  | SpecialInstruction of SpecialOpcode * Value * Value
