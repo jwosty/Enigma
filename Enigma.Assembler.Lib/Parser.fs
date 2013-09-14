@@ -5,7 +5,8 @@ open Microsoft.FSharp.Reflection
 open AbstractSyntaxTree
 open Tokenizer
 
-let nameOpcodeMap = FSharpType.GetUnionCases(typeof<Opcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
+let nameBasicOpcodeMap = FSharpType.GetUnionCases(typeof<BasicOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
+let nameSpecialOpcodeMap = FSharpType.GetUnionCases(typeof<SpecialOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
 let nameRegisterMap =
   let names = ["RegA"; "RegB"; "RegC"; "RegX"; "RegY"; "RegZ"; "RegI"; "RegJ"; "SP"; "PC"; "EX"]
   FSharpType.GetUnionCases(typeof<Value>)
@@ -14,8 +15,30 @@ let nameRegisterMap =
   |> Map.ofArray
 
 // Converts a token to a case of a discriminated union using a map; returns none if not found
-let tokenToCase tok (map: Map<_, string>) : Opcode option =
+let tokenToCase (map: Map<_, _>) tok : 'a option =
   try
-    Some(unbox map.[unionCaseName tok])
+    Some(map.[unionCaseName tok])
   with
     :? System.Collections.Generic.KeyNotFoundException -> None
+
+// Parses a single operand
+let parseOperand tokens =
+  ()
+
+// Parses two operands separated by commas
+let parseOperands tokens =
+  ()
+
+// Parses tokens until an syntax error or a newline token is reached
+// TODO: Implement pointers
+let parseStatement tokens =
+  let (tok: BasicOpcode option), r = unbox tokenToCase nameBasicOpcodeMap (List.head tokens), List.tail
+  match tok with
+    | Some tok ->
+      r
+    | None ->
+      let (tok: SpecialOpcode option), r = unbox tokenToCase nameSpecialOpcodeMap (List.head tokens), List.tail
+      match tok with
+        | Some tok ->
+          r
+        | None -> failwith "Expected opcode"
