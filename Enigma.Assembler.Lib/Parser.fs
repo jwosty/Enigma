@@ -1,9 +1,9 @@
-module Enigma.Assembler.Lib.Parser
+module Enigma.Assembler.Lib.Parsing.Parser
 open Enigma.Assembler.Lib
 open GeneralFunctions
 open Microsoft.FSharp.Reflection
 open AbstractSyntaxTree
-open Tokenizer
+open Tokenizing
 
 let nameBasicOpcodeMap = FSharpType.GetUnionCases(typeof<BasicOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
 let nameSpecialOpcodeMap = FSharpType.GetUnionCases(typeof<SpecialOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
@@ -24,6 +24,13 @@ let tokenToCase (map: Map<_, _>) tok : 'a option =
 // Parses a single operand
 let parseOperand tokens =
   ()
+  (*
+  let (tok: Value option), r = unbox tokenToCase nameRegisterMap (List.head tokens), List.tail
+  match tok with
+    | Some tok ->
+      tok
+    | None -> failwith "Expected operand"
+  *)
 
 // Parses two operands separated by commas
 let parseOperands tokens =

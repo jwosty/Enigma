@@ -1,4 +1,4 @@
-namespace Enigma.Assembler.Lib
+namespace Enigma.Assembler.Lib.Tokenizing
 type Token =
   // Registers
   | RegA | RegB | RegC

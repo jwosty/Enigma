@@ -1,5 +1,5 @@
 // See http://dcpu.com/dcpu-16/
-module Enigma.Assembler.Lib.AbstractSyntaxTree
+module Enigma.Assembler.Lib.Parsing.AbstractSyntaxTree
 
 // Value union is currently incomplete
 type Value =

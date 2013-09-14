@@ -1,4 +1,4 @@
-module Enigma.Assembler.Lib.Tokenizer
+module Enigma.Assembler.Lib.Tokenizing.Tokenizer
 open System.Text.RegularExpressions
 open Microsoft.FSharp.Reflection
 open Enigma.Assembler.Lib
