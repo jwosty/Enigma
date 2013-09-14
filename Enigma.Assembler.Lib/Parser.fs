@@ -38,6 +38,10 @@ let tokenToSpecialOpcode = function
   | Token.HWN -> Some AbstractSyntaxTree.HWN | Token.HWQ -> Some AbstractSyntaxTree.HWQ | Token.HWI -> Some AbstractSyntaxTree.HWI
   | _ -> None
 
+let tokenToComma = function
+  | Token.Comma -> Some Token.Comma
+  | _ -> None
+
 // Converts a token to a case of a discriminated union using a map; returns none if not found
 let tokenToCase (map: Map<_, _>) tok : 'a option =
   try
@@ -45,26 +49,39 @@ let tokenToCase (map: Map<_, _>) tok : 'a option =
   with
     :? System.Collections.Generic.KeyNotFoundException -> None
 
+let ret x = x
+
+let tryParse tokenToASTConversion onSucceed onFailure tokens =
+  let tok = List.head tokens
+  match (tokenToASTConversion tok) with
+    | Some x -> onSucceed(x, List.tail tokens)
+    | None -> onFailure tok
+
+let tryParseError tokenToASTConversion expectedName onSucceed tokens =
+  tryParse tokenToASTConversion onSucceed (fun tok -> failwith <| sprintf "Syntax Error: Expecting %s, got `%A'" expectedName tok) tokens
+
 // Parses a single operand
-let parseOperand tokens =
-  let tok, r = List.head tokens, List.tail tokens
-  match (tokenToValue tok) with
-    | Some operand -> operand, r
-    | None -> failwith <| sprintf "Syntax Error: Expecting value, got `%A'" tok
+let parseOperand tokens = tryParseError tokenToValue "Value" ret tokens
 
 // Parses two operands separated by commas
 let parseOperands tokens =
   let src, r = parseOperand tokens
   let c, r = List.head r, List.tail r
-  match c with
-    | Token.Comma -> ()
-    | _ -> failwith <| sprintf "Syntax Error: Expecting Comma, got `%A'"  c
+  tryParseError tokenToComma "Comma" ignore tokens
   let dst, r = parseOperand r
   src, dst, r
 
 // Parses tokens until an syntax error or a newline token is reached
 // TODO: Implement pointers
 let parseInstruction tokens =
+  let opcode, r =
+    tryParse
+      <| tokenToBasicOpcode
+      <| (fun (x, r) -> failwith "Not implemented")
+      <| (fun tok -> failwith "Not implemented")
+      <| tokens
+  ()
+  (*
   let tok, r = List.head tokens, List.tail tokens
   match (tokenToBasicOpcode tok) with
     | Some opcode -> BasicInstruction(opcode, RegA, RegB)
@@ -72,3 +89,4 @@ let parseInstruction tokens =
       match (tokenToSpecialOpcode tok) with
         | Some opcode -> SpecialInstruction(opcode, RegA)
         | None -> failwith <| sprintf "Syntax Error: Expecting opcode, got `%A'" tok
+  *)
