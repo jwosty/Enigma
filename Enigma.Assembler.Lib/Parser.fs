@@ -3,6 +3,7 @@ open Microsoft.FSharp.Reflection
 open Enigma.Assembler.Lib.GeneralFunctions
 open Enigma.Assembler.Lib.Tokenizing
 open Enigma.Assembler.Lib.Parsing
+open Enigma.Assembler.Lib.Parsing.AbstractSyntaxTree
 
 let nameBasicOpcodeMap = FSharpType.GetUnionCases(typeof<AbstractSyntaxTree.BasicOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
 let nameSpecialOpcodeMap = FSharpType.GetUnionCases(typeof<AbstractSyntaxTree.SpecialOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
@@ -46,15 +47,10 @@ let tokenToCase (map: Map<_, _>) tok : 'a option =
 
 // Parses a single operand
 let parseOperand tokens =
-  let t, r = List.head tokens, List.tail tokens
-  ()
-  (*
-  let (tok: Value option), r = unbox tokenToCase nameRegisterMap (List.head tokens), List.tail
-  match tok with
-    | Some tok ->
-      tok
-    | None -> failwith "Expected operand"
-  *)
+  let tok, r = List.head tokens, List.tail tokens
+  match (tokenToValue tok) with
+    | Some operand -> operand
+    | None -> failwith <| sprintf "Syntax Error: Expecting value, got `%A'" tok
 
 // Parses two operands separated by commas
 let parseOperands tokens =
@@ -63,13 +59,10 @@ let parseOperands tokens =
 // Parses tokens until an syntax error or a newline token is reached
 // TODO: Implement pointers
 let parseStatement tokens =
-  let tok, r = tokenToCase nameBasicOpcodeMap (List.head tokens), List.tail
-  match tok with
-    | Some tok ->
-      AbstractSyntaxTree.BasicInstruction(unbox tok, AbstractSyntaxTree.Literal 42s, AbstractSyntaxTree.Literal 43s)
+  let tok, r = List.head tokens, List.tail tokens
+  match (tokenToBasicOpcode tok) with
+    | Some opcode -> BasicInstruction(opcode, RegA, RegB)
     | None ->
-      let (tok: AbstractSyntaxTree.SpecialOpcode option), r = unbox tokenToCase nameSpecialOpcodeMap (List.head tokens), List.tail
-      match tok with
-        | Some tok ->
-          AbstractSyntaxTree.SpecialInstruction(unbox tok, AbstractSyntaxTree.Literal 42s)
-        | None -> failwith "Expected opcode"
+      match (tokenToSpecialOpcode tok) with
+        | Some opcode -> SpecialInstruction(opcode, RegA)
+        | None -> failwith <| sprintf "Syntax Error: Expecting opcode, got `%A'" tok
