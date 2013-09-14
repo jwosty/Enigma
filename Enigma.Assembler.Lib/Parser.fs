@@ -32,13 +32,13 @@ let parseOperands tokens =
 // Parses tokens until an syntax error or a newline token is reached
 // TODO: Implement pointers
 let parseStatement tokens =
-  let (tok: BasicOpcode option), r = unbox tokenToCase nameBasicOpcodeMap (List.head tokens), List.tail
+  let tok, r = tokenToCase nameBasicOpcodeMap (List.head tokens), List.tail
   match tok with
     | Some tok ->
-      r
+      BasicInstruction(unbox tok, Literal 42s, Literal 43s)
     | None ->
       let (tok: SpecialOpcode option), r = unbox tokenToCase nameSpecialOpcodeMap (List.head tokens), List.tail
       match tok with
         | Some tok ->
-          r
+          SpecialInstruction(unbox tok, Literal 42s)
         | None -> failwith "Expected opcode"

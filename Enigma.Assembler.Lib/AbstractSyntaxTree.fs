@@ -40,4 +40,4 @@ type SpecialOpcode =
 
 type Instruction =
   | BasicInstruction of BasicOpcode * Value * Value
-  | SpecialInstruction of SpecialOpcode * Value * Value
+  | SpecialInstruction of SpecialOpcode * Value
