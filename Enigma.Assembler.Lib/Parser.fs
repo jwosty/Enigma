@@ -58,7 +58,7 @@ let parseOperands tokens =
 
 // Parses tokens until an syntax error or a newline token is reached
 // TODO: Implement pointers
-let parseStatement tokens =
+let parseInstruction tokens =
   let tok, r = List.head tokens, List.tail tokens
   match (tokenToBasicOpcode tok) with
     | Some opcode -> BasicInstruction(opcode, RegA, RegB)
