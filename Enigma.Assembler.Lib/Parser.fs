@@ -66,21 +66,21 @@ let parseOperand tokens = tryParseError tokenToValue "Value" ret tokens
 // Parses two operands separated by commas
 let parseOperands tokens =
   let src, r = parseOperand tokens
-  let c, r = List.head r, List.tail r
-  tryParseError tokenToComma "Comma" ignore tokens
+  let _, r = tryParseError tokenToComma "Comma" ret r
   let dst, r = parseOperand r
   src, dst, r
 
 // Parses tokens until an syntax error or a newline token is reached
 // TODO: Implement pointers
 let parseInstruction tokens =
-  let opcode, r =
-    tryParse
-      <| tokenToBasicOpcode
-      <| (fun (x, r) -> failwith "Not implemented")
-      <| (fun tok -> failwith "Not implemented")
-      <| tokens
-  ()
+  tryParse
+    <| tokenToBasicOpcode
+    <| (fun (basicOpcode, r) ->
+      let src, dst, r = parseOperands r
+      BasicInstruction(basicOpcode, src, dst), r)
+    <| (fun tok -> failwith "Not implemented")
+    <| tokens
+  
   (*
   let tok, r = List.head tokens, List.tail tokens
   match (tokenToBasicOpcode tok) with
