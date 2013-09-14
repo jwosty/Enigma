@@ -38,9 +38,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="GeneralFunctions.fs" />
     <Compile Include="AbstractSyntaxTree.fs" />
     <Compile Include="Tokens.fs" />
-    <Compile Include="GeneralFunctions.fs" />
     <Compile Include="Tokenizer.fs" />
     <Compile Include="Parser.fs" />
     <None Include="script.fsx" />

@@ -1,5 +1,6 @@
 namespace Enigma.Assembler.Lib.Tokenizing
 open Microsoft.FSharp.Reflection
+open Enigma.Assembler.Lib.GeneralFunctions
 
 type Token =
   // Registers
@@ -46,8 +47,6 @@ type Token =
   | Whitespaces
   | Newlines
   | EOF
-  
-  member this.Name = (fst <| FSharpValue.GetUnionFields(this, typeof<Token>)).Name
 
   // Returns a tuple containing the token's string regex and whether or not the token is a type of
   // separator (for tokens that aren't, then two or more successive instances of these tokens must
@@ -69,7 +68,7 @@ type Token =
       | Newlines -> "[\f\n\r]+"
       | EOF -> "$"
       // By default, the token regex is just the token name itself and not a separator 
-      | _ -> this.Name
+      | _ -> unionCaseName this
 
   // Tells whether or not a token is 
   member this.isSeparator =
