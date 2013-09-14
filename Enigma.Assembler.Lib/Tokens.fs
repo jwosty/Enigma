@@ -12,6 +12,7 @@ type Token =
   // -----------------
   // - Basic opcodes -
   // -----------------
+  | SET
   // Math
   | ADD | SUB
   | MUL | MLI | DIV | DVI
