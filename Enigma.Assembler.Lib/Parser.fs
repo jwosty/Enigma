@@ -78,15 +78,12 @@ let parseInstruction tokens =
     <| (fun (basicOpcode, r) ->
       let src, dst, r = parseOperands r
       BasicInstruction(basicOpcode, src, dst), r)
-    <| (fun tok -> failwith "Not implemented")
+    <| (fun _ ->
+      tryParseError
+        <| tokenToSpecialOpcode
+        <| "Basic Opcode or Special Opcode"
+        <| (fun (specialOpcode, r) ->
+          let src, r = parseOperand r
+          SpecialInstruction(specialOpcode, src), r)
+        <| tokens)
     <| tokens
-  
-  (*
-  let tok, r = List.head tokens, List.tail tokens
-  match (tokenToBasicOpcode tok) with
-    | Some opcode -> BasicInstruction(opcode, RegA, RegB)
-    | None ->
-      match (tokenToSpecialOpcode tok) with
-        | Some opcode -> SpecialInstruction(opcode, RegA)
-        | None -> failwith <| sprintf "Syntax Error: Expecting opcode, got `%A'" tok
-  *)
