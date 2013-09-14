@@ -42,6 +42,11 @@ let tokenToComma = function
   | Token.Comma -> Some Token.Comma
   | _ -> None
 
+let tokenToNewlines = function
+  | Token.Newlines -> Some Token.Newlines
+  | Token.EOF -> Some Token.EOF
+  | _ -> None
+
 // Converts a token to a case of a discriminated union using a map; returns none if not found
 let tokenToCase (map: Map<_, _>) tok : 'a option =
   try
@@ -87,3 +92,12 @@ let parseInstruction tokens =
           SpecialInstruction(specialOpcode, src), r)
         <| tokens)
     <| tokens
+
+let rec parse prevInstructions tokens: Instruction list =
+  match tokens with
+    | [] -> prevInstructions
+    | [EOF] -> prevInstructions
+    | _ ->
+      let instruction, r = parseInstruction tokens
+      let _, r = tryParseError tokenToNewlines "Newline or EOF" ret r
+      parse (prevInstructions @ [instruction]) r
