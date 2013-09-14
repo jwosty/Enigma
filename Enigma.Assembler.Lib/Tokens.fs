@@ -1,4 +1,5 @@
 namespace Enigma.Assembler.Lib.Tokenizing
+open Enigma.Assembler.Lib.GeneralFunctions
 type Token =
   // Registers
   | RegA | RegB | RegC

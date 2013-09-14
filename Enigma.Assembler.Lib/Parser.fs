@@ -2,8 +2,8 @@ module Enigma.Assembler.Lib.Parsing.Parser
 open Enigma.Assembler.Lib
 open GeneralFunctions
 open Microsoft.FSharp.Reflection
-open AbstractSyntaxTree
-open Tokenizing
+open Enigma.Assembler.Lib.Tokenizing
+open Enigma.Assembler.Lib.Parsing.AbstractSyntaxTree
 
 let nameBasicOpcodeMap = FSharpType.GetUnionCases(typeof<BasicOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray
 let nameSpecialOpcodeMap = FSharpType.GetUnionCases(typeof<SpecialOpcode>) |> Array.map (fun caseInfo -> caseInfo.Name, FSharpValue.MakeUnion(caseInfo, [||])) |> Map.ofArray

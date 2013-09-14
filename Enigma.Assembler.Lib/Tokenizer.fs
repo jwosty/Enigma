@@ -1,8 +1,8 @@
 module Enigma.Assembler.Lib.Tokenizing.Tokenizer
 open System.Text.RegularExpressions
 open Microsoft.FSharp.Reflection
-open Enigma.Assembler.Lib
-open GeneralFunctions
+open Enigma.Assembler.Lib.Tokenizing
+open Enigma.Assembler.Lib.GeneralFunctions
 
 // Identifies the next token, returns it (in the form of a Token), and returns the rest of the string
 let takeToken input =

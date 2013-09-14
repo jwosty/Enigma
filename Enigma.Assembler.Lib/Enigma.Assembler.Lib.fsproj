@@ -9,17 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Enigma.Assembler.Lib</RootNamespace>
     <AssemblyName>Enigma.Assembler.Lib</AssemblyName>
-    <BuildOrder>
-      <BuildOrder>
-        <String>AssemblyInfo.fs</String>
-        <String>AbstractSyntaxTree.fs</String>
-        <String>Tokens.fs</String>
-        <String>GeneralFunctions.fs</String>
-        <String>Tokenizer.fs</String>
-        <String>script.fsx</String>
-        <String>Parser.fs</String>
-      </BuildOrder>
-    </BuildOrder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,12 +38,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Tokenizer.fs" />
-    <Compile Include="GeneralFunctions.fs" />
-    <Compile Include="script.fsx" />
     <Compile Include="AbstractSyntaxTree.fs" />
-    <Compile Include="Parser.fs" />
     <Compile Include="Tokens.fs" />
+    <Compile Include="GeneralFunctions.fs" />
+    <Compile Include="Tokenizer.fs" />
+    <Compile Include="Parser.fs" />
+    <None Include="script.fsx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
 </Project>
