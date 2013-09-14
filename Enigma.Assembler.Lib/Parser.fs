@@ -49,12 +49,18 @@ let tokenToCase (map: Map<_, _>) tok : 'a option =
 let parseOperand tokens =
   let tok, r = List.head tokens, List.tail tokens
   match (tokenToValue tok) with
-    | Some operand -> operand
+    | Some operand -> operand, r
     | None -> failwith <| sprintf "Syntax Error: Expecting value, got `%A'" tok
 
 // Parses two operands separated by commas
 let parseOperands tokens =
-  ()
+  let src, r = parseOperand tokens
+  let c, r = List.head r, List.tail r
+  match c with
+    | Token.Comma -> ()
+    | _ -> failwith <| sprintf "Syntax Error: Expecting Comma, got `%A'"  c
+  let dst, r = parseOperand r
+  src, dst, r
 
 // Parses tokens until an syntax error or a newline token is reached
 // TODO: Implement pointers
