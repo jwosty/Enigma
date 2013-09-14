@@ -1,9 +1,9 @@
 #I "/Users/alanwostenberg/Projects/FSharp/Enigma/Enigma.Assembler.Lib/"
-#load "AbstractSyntaxTree.fs"
+#load "parsing/AbstractSyntaxTree.fs"
 #load "GeneralFunctions.fs"
-#load "Tokens.fs"
-#load "Tokenizer.fs"
-#load "Parser.fs"
+#load "tokenizing/Tokens.fs"
+#load "tokenizing/Tokenizer.fs"
+#load "parsing/Parser.fs"
 open Enigma.Assembler.Lib.GeneralFunctions
 open Enigma.Assembler.Lib.Tokenizing
 open Enigma.Assembler.Lib.Tokenizing.Tokenizer

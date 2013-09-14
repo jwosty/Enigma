@@ -37,13 +37,17 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="GeneralFunctions.fs" />
-    <Compile Include="AbstractSyntaxTree.fs" />
-    <Compile Include="Tokens.fs" />
-    <Compile Include="Tokenizer.fs" />
-    <Compile Include="Parser.fs" />
     <None Include="script.fsx" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="parsing\AbstractSyntaxTree.fs" />
+    <Compile Include="GeneralFunctions.fs" />
+    <Compile Include="tokenizing\Tokens.fs" />
+    <Compile Include="tokenizing\Tokenizer.fs" />
+    <Compile Include="parsing\Parser.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
+  <ItemGroup>
+    <Folder Include="parsing\" />
+    <Folder Include="tokenizing\" />
+  </ItemGroup>
 </Project>
