@@ -5,25 +5,39 @@ open Enigma.Assembler.Lib
 open GeneralFunctions
 
 type Token =
-  // Registers and the like
-  | RegA
-  | RegB
-  | RegC
-  | RegX
-  | RegY
-  | RegZ
-  | RegI
-  | RegJ
+  // Registers
+  | RegA | RegB | RegC
+  | RegX | RegY | RegZ
+  | RegI | RegJ
+  // Special registers
+  | SP | PC | EX
   
-  // Basic opcodes
-  | SET
-  | ADD
-  | SUB
-  | MUL
-  | DIV
+  // -----------------
+  // - Basic opcodes -
+  // -----------------
+  // Math
+  | ADD | SUB
+  | MUL | MLI | DIV | DVI
+  | MOD | MDI
+  // Bitwise logic
+  | AND | BOR | XOR
+  // Shifting
+  | SHR | ASR | SHL
+  // Branching
+  | IFB | IFC | IFE | IFN
+  | IFG | IFA | IFL | IFU
+  // Other stuff
+  | ADX | SBX
+  | STI | STD
   
-  // Special opcodes
+  // -------------------
+  // - Special opcodes -
+  // -------------------
   | JSR
+  // Interrupt stuff
+  | INT | IAG | IAS | IAQ
+  // Hardware devices
+  | HWN | HWQ | HWI
   
   // Syntax elements
   | LeftBracket
