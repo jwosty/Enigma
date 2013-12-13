@@ -110,12 +110,14 @@ let parseInstruction tokens =
         <| tokens)
     <| tokens
 
-// Parses multiple instructions separated by newlines until EOF is reached
-let rec parse prevInstructions tokens: Instruction list =
-  match tokens with
-    | [] -> prevInstructions
-    | [EOF] -> prevInstructions
-    | _ ->
-      let instruction, r = parseInstruction tokens
-      let _, r = tryParseError tokenToNewlines "Newline or EOF" ret r
-      parse (prevInstructions @ [instruction]) r
+let parse =
+  // Parses multiple instructions separated by newlines until EOF is reached
+  let rec parse prevInstructions tokens: Instruction list =
+    match tokens with
+      | [] -> prevInstructions
+      | [EOF] -> prevInstructions
+      | _ ->
+        let instruction, r = parseInstruction tokens
+        let _, r = tryParseError tokenToNewlines "Newline or EOF" ret r
+        parse (prevInstructions @ [instruction]) r
+  parse []

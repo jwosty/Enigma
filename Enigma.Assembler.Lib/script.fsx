@@ -10,11 +10,12 @@ open Enigma.Assembler.Lib.Tokenizing.Tokenizer
 open Enigma.Assembler.Lib.Parsing
 open Enigma.Assembler.Lib.Parsing.Parser
 
-tokenize None [] "SET A, B"
-tokenize None [] "set a, b"
-tokenize None [] "sEt a, B"
+tokenize "SET A, B"
+tokenize "set a, b"
+tokenize "sEt a, B"
 
-match [] with
-  | [42] -> Some 42
-  | [] -> None
-  | _ -> Some 0
+let buildCode = tokenize >> parse
+
+buildCode "set a, b"
+buildCode "mul b, a"
+buildCode "add i, j\nsub j, i"

@@ -25,15 +25,17 @@ let takeToken input =
     // If no tokens matched against the input, we've stumbled upon a syntax error!
     | None -> failwith "Assembly syntax error!"
 
-// A recursive tokenize function. prevToken is the Some of the previous token from the input (or
-// None if it was the beginning), prevTokens is the list of already analyzed tokens, and s is the
-// input string 
-let rec tokenize (prevToken: Token option) (prevTokens: Token list) (s: string) =
-  let token, rest = takeToken s
-  let currTokens = (addIf prevTokens ((<>) Whitespaces) token)
-  // If neither the previous nor the current token are separators (the string beginning counts as a
-  // separator), the input is invalid
-  match prevToken with
-    | Some pt when not (pt.isSeparator || token.isSeparator) -> failwith "Assembly syntax error!"
-    | _ -> ()
-  if token = EOF then currTokens, rest else tokenize (Some(token)) currTokens rest
+let tokenize =
+  // A recursive tokenize function. prevToken is the Some of the previous token from the input (or
+  // None if it was the beginning), prevTokens is the list of already analyzed tokens, and s is the
+  // input string
+  let rec tokenize (prevToken: Token option) (prevTokens: Token list) (s: string) =
+    let token, rest = takeToken s
+    let currTokens = (addIf prevTokens ((<>) Whitespaces) token)
+    // If neither the previous nor the current token are separators (the string beginning counts as a
+    // separator), the input is invalid
+    match prevToken with
+      | Some pt when not (pt.isSeparator || token.isSeparator) -> failwith "Assembly syntax error!"
+      | _ -> ()
+    if token = EOF then currTokens, rest else tokenize (Some(token)) currTokens rest
+  (tokenize None []) >> fst
